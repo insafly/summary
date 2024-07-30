@@ -1,0 +1,4261 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///Users/kate/Documents/_react/compendium/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Конспект</title>
+	<script src="file:///Users/kate/Documents/_react/compendium/js/main.js" defer=""></script>
+	<link rel="stylesheet" href="./Конспект_files/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="./Конспект_files/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="./Конспект_files/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="./Конспект_files/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<style>
+		pre {
+			border:1px solid #ccc;
+		}
+		img{
+			max-width: 100%;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 pt-4 pb-2">
+				<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson1" role="button" aria-expanded="true" aria-controls="lesson1">Lesson #1: ES6</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse" id="lesson1">
+				<h2>ES6 (<a href="https://learn.javascript.ru/es-modern">https://learn.javascript.ru/es-modern</a>)</h2>
+				<hr class="m-5">
+				<h3>Отличия var от let и const</h3>
+				<ul>
+					<li>let и const не всплывают (хойстинг)</li>
+					<li>var можно переинициализировать</li>
+					<li>область видимости (let/const видимы в пределах блока {})</li>
+				</ul>
+				<hr class="m-5">
+				<h3>Деструктуризация</h3>
+<pre class="p-2">const user = ['John', 'Doe'];
+const [name, surename] = user;
+console.log(name, surename);
+</pre>
+<pre class="p-2">const user = {
+	name:'John', 
+	surename: 'Doe',
+	id: 'user-100500',
+	gender: 'male'
+};
+const {name: fName, surename: lName, ...rest} = user;
+console.log(fName, lName, rest);
+console.log(`Hello, ${fName} ${lName}`);
+</pre>
+<pre class="p-2">const obj = {a: 1, b: 2, c: 3};
+const obj1 = {
+	a: 0,
+	...obj,
+	c:  10
+}
+// новый, а не ссылка. При чем "a" будет 1 и "с" будет 10, потому, как последовательность присваивания
+</pre>
+				<hr class="m-5">
+				<h3>Стрелочные функции</h3>
+<pre class="p-2">const getName = (name, surename) =&gt; {
+	return `Hello, ${name} ${surename}`
+}
+console.log(getName('Kate', 'G'))
+</pre>
+<p>короткая запись:</p>
+<pre class="p-2">const getName = name =&gt; ({name: name}); // если ключ = имени переменной, то можно сократить до { name }
+console.log(getName('Kate'));
+</pre>
+				<p>У стрелочной функции нет своего this и нет псевдомассива arguments.</p>
+				<p>Динамическое определение свойств объекта. Чаще всего используется для итераций.</p>
+<pre class="p-2">const name = 'field';
+const obj = {
+	[name]: 'John'
+}
+console.log(obj);
+</pre>
+				<hr class="m-5">
+				<h3>Classes</h3>
+<pre class="p-2">class Animal {
+	constructor (name) {
+		this.name = name;
+		// or this.type = 'mammal';
+	}
+	
+	type = 'mammal';
+
+	sayHi() {
+		console.log(`Hi, I'm ${this.name}`)
+	}
+}
+
+const dog = new Animal('Max');
+
+console.log(dog.name);
+dog.sayHi();
+</pre>
+				<p>Наследование:</p>
+<pre class="p-2">class Animal {
+	constructor (name) {
+		this.name = name;
+		// or this.type = 'mammal';
+	}
+	
+	type = 'mammal';
+
+	sayHi() {
+		console.log(`Hi, I'm ${this.name}`)
+	}
+}
+
+class Cat extends Animal {
+	constructor (name, surename) {
+		// access to parent
+		super(name);
+		this.surename = surename;
+	}
+
+	eat() {
+		console.log(`Hi, I'm ${this.name} ${this.surename}`)
+	}
+
+	// новое объявление статических методов
+	static purr () {
+		console.log('Purr')
+	}
+
+	get fullName() {
+		const {name, surename} = this;
+		return `${name} ${surename}`;
+	}
+
+	// принимает один параметр
+	set newName(fullname) {
+		this.name = fullname.split(' ')[0];
+		this.surename = fullname.split(' ')[1];
+	}
+}
+
+const dog = new Animal('Max');
+const cat = new Cat('Barsik', 'Lebedev')
+
+console.log(cat.type);
+cat.eat();
+Cat.purr();
+
+// setter / getter
+cat.newName = 'Murzik Doe';
+console.log(cat.fullName);
+</pre>
+				<p>Getters и setters используются, когда надо отдавать измененное значение переменных.</p>
+				<p>Старое добавление статического метода:</p>
+<pre class="p-2">function Cat() {}
+
+Cat.prototype.meow = function() {
+	console.log('Meow');
+}
+
+const cat = new Cat();
+cat.meow();
+</pre>
+				<hr class="m-5">
+				<h3>Promises</h3>
+				<p><i>Promise</i> – это специальный объект, который содержит своё состояние. Вначале pending («ожидание»), затем – одно из: fulfilled («выполнено успешно») или rejected («выполнено с ошибкой»).</p>
+				<p>Использование:</p>
+				<ol>
+					<li>Код, которому надо сделать что-то асинхронно, создаёт объект promise и возвращает его.</li>
+					<li>Внешний код, получив promise, навешивает на него обработчики.</li>
+					<li>По завершении процесса асинхронный код переводит promise в состояние fulfilled (с результатом) или rejected (с ошибкой). При этом автоматически вызываются соответствующие обработчики во внешнем коде.</li>
+				</ol>
+				<p><i>JSON</i> - текстовый формат обмена данными.</p>
+				<p>Назначение обработчиков:</p>
+<pre class="p-2">// onFulfilled сработает при успешном выполнении
+promise.then(onFulfilled)
+// onRejected сработает при ошибке
+promise.then(null, onRejected)
+</pre>
+				<p><b>Promise после reject/resolve – неизменны.</b> Когда промис переходит в состояние «выполнен» – с результатом (resolve) или ошибкой (reject) – это навсегда.</p>
+				<p><i>'Чейнить'</i> - &nbsp;делать цепочку вызовов.</p>
+<pre class="p-2">...
+const p = getAllUsers()
+	.then((message) =&gt; {
+		console.log(massage);
+		return 'next message';
+	})
+	.then(...)
+	.then(...);
+
+// or
+p.then(console.log);
+</pre>
+				<p>Чтобы поймать всевозможные ошибки, которые возникнут при загрузке и обработке данных, добавим <strong>catch</strong> в конец нашей цепочки вызовов.</p>
+<pre class="p-2">...
+const p = getAllUsers()
+	.then(...)
+	.then(...)
+	.then(...)
+	.catch((error) =&gt; {
+		...
+	});
+</pre>
+				<p>Обработка незначительных ошибок, которые не должны останавливать цепочку. Чтобы цепочка не останавливалась, надо вернуть что-то в catch.</p>
+<pre class="p-2">...
+const p = getAllUsers()
+	.then((message) =&gt; {
+		throw 'small eror';
+
+		console.log(message);
+		return 'next error'; 
+	})
+	.then(...)
+	.then(...)
+	.catch((error) =&gt; {
+		if (error === 'small error') return 'something';
+
+		console.error(error);
+	});
+
+// после ошибки в первом then, процесс перейдет в catch, потом при мелкой шибке - в этот then
+p.then((message) =&gt; {
+	console.log(message); 
+});
+</pre>
+				<p>Существует секция <b>.finally</b>(необязательная), она выполнится в любом случае.</p>
+<pre class="p-2">...
+const p = getAllUsers()
+	.then(...)
+	.then(...)
+	.catch(...)
+	.then(...)
+	...
+	.finally(...);
+</pre>
+				<h4>Метод fetch: замена XMLHttpRequest</h4>
+				<p>Метод fetch – это XMLHttpRequest нового поколения. Он предоставляет улучшенный интерфейс для осуществления запросов к серверу: как по части возможностей и контроля над происходящим, так и по синтаксису, так как построен на промисах.</p>
+				<p>Ранее (<a href="https://learn.javascript.ru/xhr-onprogress">XMLHttpRequest: индикация прогресса</a>):</p>
+<pre class="p-2">function upload(file) {
+	var xhr = new XMLHttpRequest();
+	
+	// обработчик для закачки
+	xhr.upload.onprogress = function(event) {
+		log(event.loaded + ' / ' + event.total);
+	}
+	
+	// обработчики успеха и ошибки
+	// если status == 200, то это успех, иначе ошибка
+	xhr.onload = xhr.onerror = function() {
+		if (this.status == 200) {
+		log("success");
+		} else {
+		log("error " + this.status);
+		}
+	};
+	
+	xhr.open("POST", "upload", true);
+	xhr.send(file);
+}
+</pre>
+				<p>Сейчас%</p>
+<pre class="p-2">function getAllUsers() {
+	return fetch('https://jsonplaceholder.typicode.com/users')
+		.then(response =&gt; response.json())
+		.then(console.log)
+}
+getAllUsers();
+</pre>
+				<p>Статические метода промисов:</p>
+				<p><b>Promise.all([...])</b></p>
+<pre class="p-2">// берем конкретного пользователя по id
+function getAllUsers(id) {
+	return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+		.then(response =&gt; response.json())
+		.then((res) =&gt; {
+            console.log(res);
+            return res
+        })
+}
+Promise.all([
+    getAllUsers(1),
+    getAllUsers(3),
+    getAllUsers(5)
+])
+    .then((arr) =&gt; console.log(arr))
+    .catch(console.error);
+</pre>
+				<p>Если какой-то из промисов зафейлился, то фейлится весь Promies.all(...).</p>
+				<p><b>Promise.race([...])</b></p>
+				<p>Принимает массив, возвращает только первый успешно выполненный промис.</p>
+<pre class="p-2">function getAllUsers(id) {
+	return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+		.then(response =&gt; response.json())
+		.then((res) =&gt; {
+			return res
+		})
+}
+Promise.race([
+	getAllUsers(2),
+	getAllUsers(4),
+	getAllUsers(6)
+])
+	.then((arr) =&gt; console.log(arr))
+	.catch(console.error);
+</pre>
+				<p>Если ошибка появилась до того, как выполнился перый промис, то промис.рейс будет фейлд, иначе - нам все равно. Используется редко.</p>
+				<p>Оптимизация:</p>
+<pre class="p-2">function getUser(id) {
+	return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+		.then(response =&gt; response.json())
+		.then(res =&gt; res)
+}
+Promise.all([2, 4, 6].map((id) =&gt; getUser(id))
+	.then((arr) =&gt; console.log(arr))
+	.catch(console.error);
+
+// or
+Promise.all([2, 4, 6].map(getUser))
+    .then((arr) =&gt; console.log(arr))
+    .catch(console.error);
+</pre>
+				<p><b>Promise.resolve('test')</b></p>
+				<p>Пустой промис, который возвращает значение, которое мы укажем.</p>
+				<p><b>Promise.reject('test')</b></p>
+				<p>Аналогичен предыдущему, но с ошибкой.</p>
+<pre class="p-2">console.log(Promise.resolve('Test'));
+console.log(Promise.reject('Error'));
+</pre>
+				<p>Применение:</p>
+<pre class="p-2">function getUser(id) {
+	if (!id) {
+		// возвращаем промис, чтобы цепочка не остановилась
+		return Promise.reject('id is required!');
+	}
+	return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+		.then(response =&gt; response.json())
+		.then(res =&gt; res)
+}
+Promise.all([undefined, 4, 6].map(getUser))
+	.then((arr) =&gt; console.log(arr))
+	.catch(console.error);
+</pre>
+				<p>Последовательное получение запросов:</p>
+<pre class="p-2">function getUser(id) {
+	if (!id) {
+		// возвращаем промис, чтобы цепочка не остановилась
+		return Promise.reject('id is required!');
+	}
+	return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+		.then(response =&gt; response.json())
+		.then(res =&gt; res)
+}
+
+const users = [1, 2, 6].reduce((reducer, id)=&gt; {
+	return reducer
+		.then(() =&gt; getUser(id))
+		.then(console.log)
+}, Promise.resolve('start')) 
+</pre>
+				<p>Промис может возвращать промис, следующий then начнет выполняться только после выполения возвращенного промиса.</p>
+				<hr class="m-5">
+				<h3>Asyns / Await</h3>
+				<p>Функция, которая работает с промисом, должна быть объявлена как асинхронная. После подобного объявления такая функция тоже становится асинхронной.</p>
+<pre class="p-2">function getUser(id) {
+	if (!id) {
+		return Promise.reject('id is required!');
+	}
+	return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+		.then(response =&gt; response.json())
+		.then(res =&gt; res)
+}
+
+async function getAllUsers(array) {
+	// await ждет, пока выполнится все
+	const result = await Promise.all(array.map(getUser));
+
+	console.log(result)
+}
+
+getAllUsers([1, 2, 3]);
+</pre>
+				<hr class="m-5">
+				<h3>REST и основные его принципы.</h3>
+				<p><a href="http://dashvlas.com/blog/rest">http://dashvlas.com/blog/rest</a></p>
+				<p><i>Rest</i> -&nbsp;стандарт создания приложений.</p>
+				<h4>http запрос</h4>
+				<p>Состоит из:</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/HTTP_Request.png" alt="http request"></p>
+				<p>Headers - всевозможная дополнительная информация.</p>
+				<h4>4 основных типа HTTP запросов REST-архитектуры:</h4>
+				<ul>
+					<li><b>GET</b> — для получения (чтение) (нет бади, все в урле)</li>
+					<li><b>POST</b> — для создания</li>
+					<li><b>PUT/PUTCH</b> — для изменения</li>
+					<li><b>DELETE</b> — для удаления</li>
+					<li>...</li>
+					<li><b>OPTIONS</b> - для определения параметров или требований, связанных с ресурсом</li>
+				</ul>
+				<h4>HTTP статус коды:</h4>
+				<p>Статус коды указывают на результат HTTP запроса.</p>
+				<ul>
+					<li><b>1ХХ</b> — информационный</li>
+					<li><b>2ХХ</b> — успешное выполнение</li>
+					<li><b>3ХХ</b> — перенаправление</li>
+					<li><b>4ХХ</b> — ошибка клиента</li>
+					<li><b>5ХХ</b> — ошибка сервера</li>
+				</ul>
+				<hr class="m-5">
+				<h3>Концепции ООП</h3>
+				<ol>
+					<li><b>Полиморфизм</b> — возможность использовать объект (функцию) без знания ее реализации, но быть уверенными в результате (например jQuery, который может принимать разные типы данных, но мы всегда получаем определенный объект как результат). реализуется за счет if(type) в js. В других языках Дженерики, перегрузки функций, интерфейсы</li>
+					<li><b>Наследование</b> — способность объекта или класса базироваться на другом объекте или классе. Это главный механизм для повторного использования кода. Наследственное отношение классов четко определяет их иерархию</li>
+					<li><b>Инкапсуляция</b> — скрытие реализации от доступа из вне. Реализуется за счет замыкания. В других языка за счет идентификаторов доступа</li>
+				</ol>
+				<h5>Инкапсуляция</h5>
+				<p>Реализуется с помощью замыканий (<a href="https://learn.javascript.ru/closures">https://learn.javascript.ru/closures</a>).</p>
+<pre class="p-2">function makeCounter() {
+var currentCount = 1;
+
+return function() { // (**)
+	return currentCount++;
+};
+}
+
+var counter = makeCounter(); // (*)
+
+// каждый вызов увеличивает счётчик и возвращает результат
+alert( counter() ); // 1
+alert( counter() ); // 2
+alert( counter() ); // 3
+
+// создать другой счётчик, он будет независим от первого
+var counter2 = makeCounter();
+alert( counter2() ); // 1
+</pre>
+				<hr class="m-5">
+				<h3>Концепции функционального программирования.</h3>
+				<ol>
+					<li><b>Неизменяемость</b> - не изменять объекты, а возвращать новые</li>
+					<li><b>Чистые функции</b> - функции которые не имеют side effects</li>
+					<li><b>Функции высшего порядка</b> - функции, которые использую другие функции (могут принимать их как аргумент, использовать, или возвращать другие функции)</li>
+					<li><b>Каррирование</b> - функциональная технология, при которой мы можем определить параметры функции, до ее вызова.Может достигаться за счет bind или за счет оборачивания функции в другую функцию и передачи ей параметров (термин функционального программирования, который означает создание новой функции путём фиксирования аргументов существующей)</li>
+					<li><b>Рекурсия</b>. Функциональное программирование рекомендует использовать рекурсию вместо циклов</li>
+					<li><b>Композиция</b>. Последовательность функций, каждая из которых возвращает какой-то результат в последующую.</li>
+				</ol>
+				<p><i>Каррирование</i></p>
+<pre class="p-2">function mul(a, b) {
+	return a * b;
+};
+
+// double умножает только на два
+var double = mul.bind(null, 2); // контекст фиксируем null, он не используется
+
+alert( double(3) ); // = mul(2, 3) = 6
+alert( double(4) ); // = mul(2, 4) = 8
+alert( double(5) ); // = mul(2, 5) = 10
+</pre>
+				<p>Следующий пример очень популярен в реакте.</p>
+<pre class="p-2">function request(method, url, body) {
+	return fetch(url, {
+		method,
+		body
+	})
+}
+
+const users = {
+	getAllUsers = request('GET', '/users')
+}
+
+users.getAllUsers({/* тут будет передаваться только бади */})
+</pre>
+				<p><i>Композиция</i></p>
+<pre class="p-2">const arr = [1,3,5].map(...).filter(...).forEach(...);
+</pre>
+				<h2>Декларативный и императивный стили программирования</h2>
+				<p><b>Декларати́вное программи́рование</b> — это парадигма программирования, в которой задаётся спецификация решения задачи, то есть описывается, что представляет собой проблема и ожидаемый результат.</p>
+				<p><b>Императи́вное программи́рование</b> — это парадигма программирования (стиль написания исходного кода компьютерной программы), для которой характерно следующее:</p>
+				<ul>
+					<li>в исходном коде программы записываются инструкции (команды);</li>
+					<li>инструкции должны выполняться последовательно;</li>
+					<li>данные, получаемые при выполнении предыдущих инструкций, могут читаться из памяти последующими инструкциями;</li>
+					<li>данные, полученные при выполнении инструкции, могут записываться в память.</li>
+				</ul>
+				<p>Императивный - максимально подробно все описывается, конкретно описывается реализация каждого шага.</p>
+				<p>При декларативном стиле программирования нам не важно, как мы это делаем, нам важно, что мы получим в результате. При этом переиспользуются многие функции и код минимизируется. Необходимо стремиться писать код в декларативном стиле.</p>
+				<p>Если мы пишем в функциональном стиле, мы в любом случае используем декларативный подход.</p>
+				<hr class="m-5">
+				<p>Для понимания ассинхронности:</p>
+				<ul>
+					<li><a href="https://www.youtube.com/watch?v=8cV4ZvHXQL4">https://www.youtube.com/watch?v=8cV4ZvHXQL4</a></li>
+					<li><a href="https://www.youtube.com/watch?v=Ih6Q7ka2eSQ">https://www.youtube.com/watch?v=Ih6Q7ka2eSQ</a></li>
+					<li><a href="https://github.com/devSchacht/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch1.md">https://github.com/devSchacht/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch1.md</a></li>
+					<li><a href="https://github.com/devSchacht/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch2.md">https://github.com/devSchacht/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch2.md</a></li>
+					<li><a href="https://github.com/devSchacht/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch3.md">https://github.com/devSchacht/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch3.md</a></li>
+				</ul>
+				<hr class="m-5">
+				<p>Подкасты для фронтов:</p>
+				<ul>
+						<li><a href="https://radio-t.com/"></a> - он больше для джавистов</li>
+						<li><a href="https://soundcloud.com/frontend-weekend">https://soundcloud.com/frontend-weekend</a></li>
+						<li><a href="https://soundcloud.com/devschacht">https://soundcloud.com/devschacht</a></li>
+						<li><a href="https://soundcloud.com/frontend_u">https://soundcloud.com/frontend_u</a></li>
+						<li><a href="https://soundcloud.com/web-standards">https://soundcloud.com/web-standards</a></li>
+						<li><a href="https://soundcloud.com/5minreact">https://soundcloud.com/5minreact</a></li>
+						<li><a href="https://soundcloud.com/loftblog">https://soundcloud.com/loftblog</a></li>
+						<li><a href="https://soundcloud.com/minsk-json">https://soundcloud.com/minsk-json</a></li>
+						<li><a href="https://soundcloud.com/csssr">https://soundcloud.com/csssr</a></li>
+						<li><a href="https://soundcloud.com/podlodka">https://soundcloud.com/podlodka</a></li>
+						<li><a href="https://soundcloud.com/begebot">https://soundcloud.com/begebot</a></li>
+				</ul>
+				<hr class="m-5">
+			</div>
+			<div class="col-12 pt-2 pb-2">
+					<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson2" role="button" aria-expanded="true" aria-controls="lesson2">Lesson #2: React</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse" id="lesson2">
+				<h2>React (<a href="https://ru.react.js.org/">https://ru.react.js.org/</a>)</h2>
+				<p>React - библиотека. Отличие от фреймверка в гибкости, библиотека предоставляет функции и элементы, которые можно использовать у себя. Фреймверк подразумевает нечто большее, например, четкие требования к структуре. + Библиотека - меньше. В реакте можно самим выбрать, например, какой роутинг использовать и т.д.</p>
+				<hr class="m-5">
+				<h3>Начало работы</h3>
+<pre class="p-2">ReactDOM.render(element, container[, callback])
+
+React.createElement(
+	type,
+	[props],
+	[...children]
+)
+</pre>
+				<h4><a href="https://github.com/MoonHighway/learning-react">MoonHighway/learning-react</a> - дополнительная литература. Базовые примеры - глава 4, раздел '02-react-elements'.</h4>
+				<p>Пример #01 <i>базовый</i>.</p>
+<pre class="p-2">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;meta charset="utf-8"&gt;
+	&lt;title&gt;React Elements&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;!-- Target Container --&gt;
+&lt;div id="react-container"&gt;&lt;/div&gt;
+
+&lt;!-- React Library &amp; React DOM--&gt;
+&lt;script src="https://unpkg.com/react@16/umd/react.development.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+	const dish = React.createElement("h1", null, "Baked Salmon")
+	ReactDOM.render(
+		dish,
+		document.getElementById('react-container')
+	)
+	console.log('dish', dish)
+&lt;/script&gt;
+
+&lt;/body&gt;
+</pre>
+				<p>Пример #02 <i>с добавлением аттрибутов</i>.</p>
+<pre class="p-2">...
+&lt;script&gt;
+	const dish = React.createElement(
+		"h1",
+		{id: "recipe-0", 'data-type': "title"},
+		"Baked Salmon"
+	)
+	ReactDOM.render(
+		dish,
+		document.getElementById('react-container')
+	)
+	console.log('dish', dish)
+&lt;/script&gt;
+...
+</pre>
+				<p>Пример #03 <i>с дочерними элементами</i>.</p>
+<pre class="p-2">...
+&lt;script&gt;
+	const dish = React.createElement("section", {id: "baked-salmon"},
+	React.createElement("h1", null, "Baked Salmon"),
+	React.createElement("ul", {"className": "ingredients"},
+		React.createElement("li", null, "1 lb Salmon"),
+		React.createElement("li", null, "1 cup Pine Nuts"),
+		React.createElement("li", null, "2 cups Butter Lettuce"),
+		React.createElement("li", null, "1 Yellow Squash"),
+		React.createElement("li", null, "1/2 cup Olive Oil"),
+		React.createElement("li", null, "3 cloves of Garlic")
+	),
+	React.createElement("section", {"className": "instructions"},
+		React.createElement("h2", null, "Cooking Instructions"),
+		React.createElement("p", null, "Preheat the oven to 350 degrees."),
+		React.createElement("p", null, "Spread the olive oil around a glass baking dish."),
+		React.createElement("p", null, "Add the salmon, Garlic, and pine..."),
+		React.createElement("p", null, "Bake for 15 minutes."),
+		React.createElement("p", null, "Add the Butternut Squash and put..."),
+		React.createElement("p", null, "Remove from oven and let cool for 15 ....")
+	)
+	)
+	ReactDOM.render(dish, document.getElementById('react-container'))
+	console.log('dish element', dish)
+&lt;/script&gt;
+...
+</pre>
+				<p>Пример #04 <i> с дочерними элементами в цикле</i>.</p>
+<pre class="p-2">...
+&lt;script&gt;
+const items = [
+	"1 lb Salmon",
+	"1 cup Pine Nuts",
+	"2 cups Butter Lettuce",
+	"1 Yellow Squash",
+	"1/2 cup Olive Oil",
+	"3 cloves of Garlic"
+]
+const ingredients = React.createElement(
+	"ul",
+	{ className: "ingredients" },
+	items.map((ingredient, i) =&gt;
+		React.createElement("li", { key: i }, ingredient)
+	)
+)
+ReactDOM.render(
+	ingredients,
+	document.getElementById('react-container')
+)
+console.log('ingredients', ingredients)
+&lt;/script&gt;
+...
+</pre>
+				<p><b>Key</b> в реакте необходим для индикации элемента самим реактом. Ключи должны быть уникальными, не рекомендуется использовать простые индексы массива.</p>
+				<hr class="m-5"><p></p>
+				<h3>Virtual DOM</h3>
+				<p><img class="d-block mx-auto" src="file:///Users/kate/Documents/_react/compendium/images/vdom.png" alt="virtual dom"></p>
+				<p>У реакта есть виртуальный DOM. Реакт меняет только измененные элементы и их детей. Реакт минимизирует затраты на обавление элементов в DOM.</p>
+				<hr class="m-5">
+				<h3>JSX</h3>
+				<p><i>JSX</i> - это препроцессор, который добавляет синтаксис XML к JavaScript. Можно использовать реакт без JSX. Браузером не воспринимается, необходим компилятор, например, babel.</p>
+<pre class="p-2">const element = &lt;h1&gt;Hello, world!&lt;/h1&gt;
+</pre>
+				<hr class="m-5">
+				<h3>SPA with webpack and babel</h3>
+				<p>У реакта есть CLI - <a href="https://github.com/facebook/create-react-app">Create-react-app</a>.</p>
+				<p>Создание:</p>
+<pre class="p-2">npx create-react-app appName
+cd appName
+npm start
+</pre>
+				<p>Доступные команды:</p>
+				<ul>
+					<li><b>npm start</b> - Runs the app in the development mode. Open http://localhost:3000 to view it in the browser. The page will reload if you make edits. You will also see any lint errors in the console.</li>
+					<li><b>npm test</b> - Launches the test runner in the interactive watch mode. See the section about running tests for more information.</li>
+					<li><b>npm run build</b> - Builds the app for production to the build folder. It correctly bundles React in production mode and optimizes the build for the best performance. The build is minified and the filenames include the hashes. </li>
+					<li><b>npm run eject</b> - (<i>Note: this is a one-way operation.</i>) Once you eject, you can’t go back! If you aren’t satisfied with the build tool and configuration choices, you can eject at any time. This command will remove the single build dependency from your project. Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except eject will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own. You don’t have to ever use eject. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.</li>
+				</ul>
+				<p>Пара ссылок для понимания принципов работы с package.json:</p>
+				<ul>
+					<li><a href="https://habr.com/ru/post/243335/">npm (node package manager) для простых смертных</a></li>
+					<li><a href="https://monsterlessons.com/project/lessons/zachem-nuzhen-packagejson">Зачем нужен package.json</a></li>
+					<li><a href="https://docs.npmjs.com/files/package.json">npm - package.json</a></li>
+				</ul>
+				<hr class="m-5">
+				<h3>Компоненты и аттрибуты</h3>
+				<p>Компонент (кусок кода, кусок HTML) можно создавать двумя способами:</p>
+<pre class="p-2">// Создание компонента с помощью класса
+
+class Square extends React.Component { // наследоваться надо обязательно
+	render() {
+		return {
+			&lt;button className="square" onClick={ function() {alert('click'); } }&gt;
+				{ this.props.value }
+			&lt;/button&gt;
+		}
+	}
+}
+
+
+
+// Можно создать функцию, которая будет возвращать JSX
+
+const Square = () =&gt; {
+	&lt;button className="square" onClick={ function() {alert('click'); } }&gt;
+		{ this.props.value }
+	&lt;/button&gt;
+}
+</pre>
+				<p>Правило хорошего тона - один компонент = один файл.</p>
+				<p>Модульность в ES6 подразумевает наличие export в файле модуля.</p>
+<pre class="p-2">// если в файле компонента
+export default App;
+
+// то в импорте
+import App from './App.js';
+</pre>
+<pre class="p-2">// если в файле компонента
+export App;
+
+// то в импорте нужно применить деструктуризацию
+import {App} from './App.js';
+// или (тут вытянутся все элементы, которые есть в App.js)
+// не рекомендуется в силу неочевидности получаемого счастья
+import * from './App.js'
+</pre>
+				<p>Если необходимо экспортировать несколько функций:</p>
+<pre class="p-2">// default может быть только один
+export default App;
+
+// если несколько
+export App01;
+export App02;
+
+// или
+export default {
+	App01: ...,
+	App02: ...
+}
+</pre>
+				<p>В JSX "className" = "class" в HTML.</p>
+				<hr class="m-5">
+				<h3>Стили в JSX</h3>
+				<p>Либо просто инлайново, либо джеесом:</p>
+<pre class="p-2">...
+&lt;div className="wrapper" style={ { backgroundColor: 'red' } }&gt;
+...
+</pre>
+				<p>Одни фигурные скобки - для оборзначения "начала джеес кода", вторые - для объекта.</p>
+				<hr class="m-5">
+				<h3>Создание компонента с помощью class</h3>
+<pre class="p-2">import React, {Component} from 'react';
+
+...
+
+class App extends Component {
+	render() {
+		return {
+			...
+		}
+	}
+}
+</pre>
+				<hr class="m-5">
+				<p>ComponentName обязан быть с большой буквы, чтобы реакт осознал, что это его компонент.</p>
+<pre class="p-2">import ComponentName from '...'
+</pre>
+				<hr class="m-5">
+				<h3>State &amp; props</h3>
+				<p><i>Простой рендеринг списков</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+import './App.css';
+
+import users from './users.json'
+
+class App extends Component {
+	render(){
+		return (
+			&lt;div className="App"&lt;
+				&lt;ul&lt;
+					{users.map(( user ) =&lt; 
+						&lt;li key={ user.id }&lt;{ user.name }&lt;/li&lt;)
+					}
+				&lt;/ul&lt;
+			&lt;/div&lt;
+		);
+	}
+}
+
+export default App;
+</pre>
+				<hr class="m-5">
+				<h4>Props</h4>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+import './App.css';
+
+import users from './users.json'
+import User from './components/User'
+
+class App extends Component {
+	render(){
+		return (
+			&lt;div className="App"&gt;
+				&lt;ul&gt;
+					{users.map(( user ) =&gt; 
+						&lt;User 
+							name={ user.name } 
+							key={ user.id }
+						/&gt;
+					)}
+				&lt;/ul&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+
+export default App;
+</pre>
+				<p><i>User.js</i></p>
+<pre class="p-2">import React from 'react';
+
+export default function User (props) {
+	return &lt;li&gt;{ props.name }&lt;/li&gt;
+}
+</pre>
+<hr class="m-5">
+				<p><b>Props для компонентов, реализованных классами</b></p>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+import './App.css';
+
+import users from './users.json'
+import User from './components/User'
+import Header from './components/Header'
+
+class App extends Component {
+	render(){
+		return (
+			&lt;div className="App"&gt;
+				&lt;Header users={ users } /&gt;
+				&lt;ul&gt;
+					{users.map(( user ) =&gt; 
+						&lt;User 
+							name={ user.name } 
+							key={ user.id }
+						/&gt;
+					)}
+				&lt;/ul&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+
+export default App;	
+</pre>
+				<p><i>Header.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+
+class Header extends Component {
+	render() {
+		return &lt;h3&gt;
+			Users: { this.props.users.length }
+		&lt;/h3&gt;
+	}
+}
+
+export default Header;
+</pre>
+				<hr class="m-5">
+				<h4>State и обработка событий</h4>
+				<p><i>props</i> (сокращение от «properties») и <i>state</i> - оба обычные объекты JavaScript. Хотя каждый из них содержат информацию, которая влияет на результат отрисовки компонента, между ними имеется важное отличие: <i>props</i> передается компоненту (аналогично параметрам функции), тогда как <i>state</i> управляется внутри компонента (подобно переменным, объявленным внутри функции).</p>
+				<p><b>Props are readonly.</b></p>
+				<p>Компонент перерисуется при изменении state или при изменении props. State можно перезадать только при помощи функции setState. setState будет заменять только тот ключ, кторый мы передаем.</p>
+				<p><b>Don't modify state directly.</b></p>
+				<p>Функция setState может принимать объект, функцию (которая возвращает объект) и вторым аргументом - коллбек, который выполнится, когда state поменяется.</p>
+<pre class="p-2">...
+this.setState((state) =&gt; ({isShowed = !state.isShowed}, () =&gt; { ... }))
+...
+</pre>
+<pre class="p-2">this.setState({comment: 'Hello'}[, callback]);
+
+this.setState((state, props) =&gt; {
+	counter: state.counter + props.increment
+});
+</pre>
+				<hr class="m-5">
+				<p><i>Header.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+
+class Header extends Component {
+	state = {
+		isCounterShowed: false,
+		test: ''                 // не заменится, при изменении стейта
+	}
+
+	clickHandler = (e) =&gt; {
+		this.setState({ isCounterShowed: true });
+	}
+
+	render() {
+		return &lt;div style={{padding: 20}}&gt;
+			&lt;button onClick={this.clickHandler}&gt;Show count&lt;/button&gt;
+			{
+				this.state.isCounterShowed ? &lt;h3&gt;Users: { this.props.users.length }&lt;/h3&gt; : ''
+			}
+		&lt;/div&gt;
+	}
+}
+
+export default Header;
+</pre>
+				<p>Менять текущее значение в&nbsp;state следующшим образом, потому, как setState - асинхронная функция:</p>
+<pre class="p-2">clickHandler = (e) =&gt; {
+	this.setState(() =&gt; ({ isCounterShowed: !this.state.isCounterShowed }));
+}
+</pre>
+				<p><i>Header.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+
+class Header extends Component {
+	state = {
+		isCounterShowed: false,
+		test: ''
+	}
+
+	clickHandler = (e) =&gt; {
+		this.setState(() =&gt; ({ isCounterShowed: !this.state.isCounterShowed }));
+	}
+
+	render() {
+		const { isCounterShowed } = this.state
+		return &lt;div style={{padding: 20}}&gt;
+			&lt;button
+				onClick={this.clickHandler}
+			&gt;
+				{ isCounterShowed ? 'Hide' : 'Show' } count&lt;/button&gt;
+			{ isCounterShowed &amp;&amp; &lt;h3&gt;Users: { this.props.users.length }&lt;/h3&gt; }
+		&lt;/div&gt;
+	}
+}
+
+export default Header;
+</pre>
+				<hr class="m-5">
+				<h4>Обработка событий для функционального компонента</h4>
+				<p>Не рекомендуется писать тяжелые функции внутри функционального компонента, потом, что при изменении props функция тоже пересоздастся. Это допустимо для мелочей. В этом случае либо выносят выше экспортируемой функции (что не очень красиво), либо (опять же) использовать небольшие функции.</p>
+				<hr class="m-5">
+				<h3>События в реакт</h3>
+				<p>У реакта их кучка - <a href="https://ru.reactjs.org/docs/events.html">SyntheticEvent</a>.</p>
+				<p>Различные способы работы с событиями.</p>
+<pre class="p-2">class Toggle extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {isToggleOn: true};
+		this.handleClick = this.handleClick.bind(this);
+	} 
+
+	handleClick(event) {
+		this.setState(state =&gt; ({
+			isToggleOn: !isToggleOn
+		}));
+	}
+
+	handleSubmit =&gt; (event) {
+		this.setState(state =&gt; ({
+			isToggleOn: !isToggleOn
+		}));
+	}
+
+	render() {
+		return (
+			&lt;form onSubmit={this.handleSubmit}&gt;
+				&lt;button
+					onClick={this.handleClick}
+					onClick={(e) =&gt; this.handleClick(e)}
+				&gt;
+					{ this.state.isToggleOn ? 'ON' : 'OFF' }
+				&lt;/button&gt;
+			&lt;/form&gt;
+		)
+	}
+}
+</pre>
+				<hr class="m-5">
+				<p>Если кнопок много, а обработчик один, и нам надо понимать, какая кнопка была нажата:</p>
+<pre class="p-2">...
+onClick = (type) =&gt; {
+	{ // Здесь на основании типа мы будем делать то или иное действие }
+	...
+}
+
+render() {
+	return &lt;div className="App"&gt;
+		...
+		{ // Обработчик с переданным параметром }
+		&lt;button onClick={() =&gt; this.onClick('add') }Add&lt;/button&gt;
+	&lt;/div&gt;
+}
+</pre>
+				<p>Второй вариант с применением каррирования:</p>
+<pre class="p-2">...
+onClick = (type) =&gt; (e) =&gt; {
+	{ // Здесь на основании типа мы будем делать то или иное действие }
+	...
+}
+
+render() {
+	return &lt;div className="App"&gt;
+		...
+		{ // Обработчик с переданным параметром }
+		&lt;button onClick={this.onClick('add')}Add&lt;/button&gt;
+	&lt;/div&gt;
+}
+</pre>
+				<p>Еще можно использовать bind...но это некрасиво и это делают крайне редко.</p>
+				<hr class="m-5">
+				<h3>Жизненный цикл реакт-комонента</h3>
+				<p>Еще одно отличие компонента-класса от компонента функции - наличие встроенных функций.</p>
+				<p><i>Lifecycle methods:</i></p>
+				<p><img class="d-block" src="file:///Users/kate/Documents/_react/compendium/images/lc.jpeg" alt="Lifecycle"></p>
+				<p>Функцию <b>shouldComponentUpdate()</b> можно использовать для понимания необходимости перерендеривания компонента. Понять, поменялись ли пропсы и стейт или нужные нам значения, основанные на них.</p>
+				<p><b>getDerivedStateFromProps()</b> - является статическим. Используется для того, чтобы вернуть state на основе пропс до рендера компонента.</p>
+<pre class="p-2">class Header extends Component {
+	state = {
+		...
+		amount: 200
+	}
+
+	static getDerivedStateFromProps(props, state) {
+		return {
+			amount:  amount.test + '$'
+		}
+	}
+	...
+}
+</pre>
+				<p><b>componentDidMount()</b> - в этой обычно делают запросы на сервер.</p>
+				<p><b>componentDidUpdate()</b> - используется для переделки компонента, если пропсы или стейт изменились.</p>
+				<p><b>componentWillUnmout()</b> - используется для дестроя. Здесь необходимо убирать обработчики событий.</p>
+				<p><b>componentDidCatch(error, errorInfo)</b> - на схеме не указан, но есть, срабатывает, когда в детях произошла какая-то ошибка. Нормально работает только в продакшен моде. Можно использовать для рендеринга красивого отображения какой-либо ошибки. Ошибку от ребенка надо передавать через "throw new Error('error')", иначе все просто упадет (замененн на cтатический метод getDerivedStateFromError в 16.8).</p>
+<pre class="p-2">class App extends Component {
+	state = {
+		...
+		error: null
+	}
+
+	componentDidCatch(error, errorInfo) {
+		this.setState({ error: error.message })
+	}
+
+	render() {
+		if (this.state.error) {
+			return <p>{ this.state.error }</p>
+		}
+
+		return ...
+	}
+}
+</pre>
+				<hr class="m-5">
+				<h4>Старая схема жизненного цикла компонента</h4>
+				<p><img class="d-block" src="file:///Users/kate/Documents/_react/compendium/images/lc-old.png" alt="lifecycle old"></p>
+				<p>Сейчас отказались от функций с will (только не от componentWillUnmout).</p>
+				<p>Часто возникала ошибка с зацикленностью функций componentWillUpdate при обновлении стейта или пропсов в этой функции.</p>
+				<p>Пока еще можно использовать unsafe функции, например - <a href="https://ru.reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops">UNSAFE_componentWillReceiveProps()</a>.</p>
+				<hr class="m-5">
+				<h3>Forms</h3>
+				<p>Инпуты обязаны быть подконтрольными. Для инпутов нужно добавить обработчик при изменении и передавать в велью стейт:</p>
+<pre class="p-2">onChange = (e) =&gt; {
+	this.setState({ counter: e.target.value })
+}
+
+...
+
+&lt;input
+	type="text"
+	onChange={ this.onChange }
+	value={ this.state.counter }
+/&gt;
+</pre>
+				<p>Пример универсального обработчика для разных инпутов:</p>
+<pre class="p-2">...
+
+class App extends Component {
+	state = {
+		counter: '0',
+		name: 'Kate'
+	}
+
+	onChange = (field) =&gt; (e) =&gt; {
+		this.setState({ [field]: e.target.value })
+	}
+
+	render(){
+		return (
+			&lt;div className="App"&gt;
+				&lt;input
+					type="text"
+					onChange={ this.onChange('counter') }
+					value={ this.state.counter }
+				/&gt;
+				&lt;input
+					type="text"
+					onChange={ this.onChange('name') }
+					value={ this.state.name }
+				/&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+</pre>
+				<p>Или (более редкая запись):</p>
+<pre class="p-2">...
+
+class App extends Component {
+	state = {
+		counter: '0',
+		name: 'Kate'
+	}
+
+	onChange(e) {
+		this.setState({ [e.target.name]: e.target.value })
+	}
+
+	render(){
+		return (
+			&lt;div className="App"&gt;
+				&lt;input
+					type="text"
+					name="counter"
+					onChange={ this.onChange('counter') }
+					value={ this.state.counter }
+				/&gt;
+				&lt;input
+					type="text"
+					name="name"
+					onChange={ this.onChange('name') }
+					value={ this.state.name }
+				/&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+</pre>
+				<p>Actions у форм не используют, потому, как нам не нужна дефолтная отправка GET запроса на сервер, нужно просто написать обраьотчик onSubmit, в котором уже писать необходимый запрос самостоятельно.</p>
+<pre class="p-2">onSubmit = () =&gt; {
+	fetch(this.state)
+}
+</pre>
+				<p>Select обработчики должны быть заданы на сам селект, value тоже.</p>
+				<hr class="m-5">
+				<h3>Lifting State Up</h3>
+				<p>Часто случается так, что нескольким различным компонентам необходимо работать с единым состоянием. Для этого необходимо передавать данные из дочернего элемента в ближайший родительский. Для этого служит прием <i>lifting state up</i>.</p>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+import './App.css';
+
+import usersArray from './users.json'
+import Field from './components/Field'
+
+class App extends Component {
+	state = {
+		users: usersArray.map(({name}) =&gt; name)
+	}
+
+	onChange = (index, name) =&gt; {
+		const users = this.state.users.slice(); // copy of our array
+		users[index] = name;
+		this.setState({ users });
+	}
+
+	render(){
+		const {users} = this.state;
+		
+		return (
+			&lt;div className="App"&gt;
+				&lt;ul&gt;
+					{users.map((name, i) =&gt;
+						&lt;Field key={i}
+							name={'user-' + i}
+							value={name}
+							index={i}
+							onChange={this.onChange}
+						/&gt;
+					)}
+				&lt;/ul&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+
+export default App;
+</pre>
+				<p><i>Field.js</i></p>
+<pre class="p-2">import React from 'react';
+
+export default function Field ({ name, value, index, onChange }) {
+	return &lt;div className="form-row"&gt;
+		&lt;label htmlFor={name}&gt;Label :&lt;/label&gt;
+		&lt;input 
+			type="text"
+			value={ value }
+			id={ name }
+			name={ name }
+			onChange={(e) =&gt; onChange(index, e.target.value)}
+		/&gt;
+	&lt;/div&gt;
+}
+</pre>
+				<p>По сути обработчик события находится в родительском компоненте, но он вызыватся из детеныша.</p>
+				<p>Компонент, который не имеет своего стейта и ничего не меняет, только рендерит что-то, называется <i>глупым компонентом (pure component)</i>.</p>
+				<p>Те компоненты, которые имеют свой стейт или какие-то сайд-эффекты (влияют во вне), называюся <i>умными компонентами</i>.</p>
+				<p>Всегда надо стремиться к тому, что умных компонентов было как можно меньше. Чтобы логика сосредатачивалась в определенных местах.</p>
+				<p>В примере выше мы "поднимаем" данные из ребенка, т.е. имспользуем прием 'lift up'.</p>
+				<hr class="m-5">
+				<p><b>Немного более красивая реализация того же примера:</b></p>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+import './App.css';
+
+import usersArray from './users.json'
+import Field from './components/Field'
+
+class App extends Component {
+	state = {
+		users: usersArray.map(({name}) =&gt; name)
+	}
+
+	onChange = (index) =&gt; e =&gt; {
+		const users = this.state.users.slice(); // copy of our array
+		users[index] = e.target.value;
+		this.setState({ users });
+		console.log(this.state.users);
+		
+	}
+
+	render(){
+		const {users} = this.state;
+		
+		return (
+			&lt;div className="App"&gt;
+				&lt;ul&gt;
+					{users.map((name, i) =&gt;
+						&lt;Field key={i}
+							name={'user-' + i}
+							value={name}
+							onChange={this.onChange(i)}
+						/&gt;
+					)}
+				&lt;/ul&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+
+export default App;
+</pre>
+								<p><i>Field.js</i></p>
+<pre class="p-2">import React from 'react';
+
+export default function Field ({ name, value, onChange }) {
+	return &lt;div className="form-row"&gt;
+		&lt;label htmlFor={name}&gt;Label :&lt;/label&gt;
+		&lt;input 
+			type="text"
+			value={ value }
+			id={ name }
+			name={ name }
+			onChange={onChange}
+		/&gt;
+	&lt;/div&gt;
+}
+</pre>
+				<hr class="m-5">
+				<h3>Условные конструкции</h3>
+				<p>Для условных конструкций в JSX можно использовать:</p>
+				<ul>
+					<li>тернарный оператор</li>
+					<li>элементарную логику</li>
+				</ul>
+				<p><i>Тернарный оператор</i>: { condition ? firstChoise : secondChoise }</p>
+				<p><i>Элементарная логика</i>:</p>
+				<ul>
+					<li>{ a &amp;&amp; b } - если а вернет истину, то пойдет дальше и вернет b</li>
+					<li>{ a &amp;&amp; b } - если а ложно, то джеес запнется уже на а и вернет false</li>
+					<li>{ a || b } - вернет первое истинное</li>
+				</ul>
+				<hr class="m-5">
+				<h3>Всяко-разно</h3>
+				<p>Для упрощения работы следует использовать деструктуризацию (сокращать длинные имена).</p>
+<pre class="p-2">...
+render() {
+	const {showCount} = this.state
+	return &lt;div&gt;...&lt;/div&gt;
+}
+...
+</pre>
+				<hr class="m-5">
+				<p>В HTML любой аттрибут по умолчанию равен true (disabled то же самое, что и disabled="true"). Если как пропс передать просто имя какой-то переменной, то компонент будет считать, что у нее значение = true.</p>
+				<hr class="m-5">
+				<p>Если надо использовать state и конструктор (ES5)</p>
+<pre class="p-2">class Header extends Component {
+	constructor (props){
+		super(props); // тут нужно передать пропсы в супер
+
+		this.state = {
+			isShowed: false
+		}
+
+	}
+
+	...
+}
+</pre>
+				<hr class="m-5">
+				<p>Для функций внутри класса используются стрелочные функции, чтобы не терять контекст, потому, что у обычных функций есть свой this. Обычно для решения используют стрелочные функции, но можно встретить следующий вариант решения:</p>
+<pre class="p-2">class Header extends Component {
+	constructor (props){
+		super(props);
+
+		this.state = {
+			isShowed: false
+		}
+
+		// задание контекста
+		this.onClick = this.onClick.bind(this);
+	}
+
+	onClick() {
+		...
+	}
+
+	...
+}
+</pre>
+				<p>Разница в том, что при перерендеринге компонента, стрелочная функция будет пересоздаваться (реакт фиксит это).</p>
+				<hr class="m-5">
+				<p>Если с сервера приходить кусок HTML и я хочу его вставить, то можно использовать <a href="https://ru.reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml">dangerouslySetInnerHTML</a>:</p>
+<pre class="p-2">function createMarkup() {
+	return {__html: 'Первый · Второй'};
+}
+	
+function MyComponent() {
+	return &lt;div dangerouslySetInnerHTML={createMarkup()} /&gt;;
+}	  
+</pre>
+				<hr class="m-5">
+				<p>Альтернативный спсоб передачи пропсов ребенку:</p>
+<pre class="p-2">// Обычно
+&lt;Item name={user.name} key={user.id} /&gt;
+
+// Альтернатива
+&lt;Item key={user.id}&gt;{ user.name }&lt;/Item&gt;
+
+// тогда в Item оно будет доступно в props.children
+export default function Item (props) {
+	return &lt;li&gt;{ props.children }&lt;/li&gt;
+}
+</pre>
+				<hr class="m-5">
+				<h2>Отличия умных и глупых компонетов (pure and smart components)</h2>
+				<p><i>Глупые копмоненты</i> (примеры: Page, Sidebar, Story, UserInfo, List):</p>
+				<ul>
+					<li>не зависят от остальной части приложения, например Flux actions или stores</li>
+					<li>часто содержатся в this.props.children</li>
+					<li>получают данные и колбэки исключительно через props</li>
+					<li>имеют свой css файл</li>
+					<li>изредка имеют свой state</li>
+					<li>могут использовать другие глупые компоненты</li>
+				</ul>
+				<p><i>Умные компоненты</i> (примеры: UserPage, FollowersSidebar, StoryContainer, FollowedUserList):</p>
+				<ul>
+					<li>оборачивает один или несколько глупых или умных компонентов</li>
+					<li>хранит состояние стора и пробрасывает его как объекты в глупые компоненты</li>
+					<li>вызывает Flux actions и обеспечивает ими глупые компоненты в виде колбэков</li>
+					<li>никогда не имеют собственных стилей</li>
+					<li>редко сами выдают DOM, используйте глупые компоненты для макета</li>
+				</ul>
+				<p><b>Плюсы подобного подхода:</b></p>
+				<ul>
+					<li>Лучшее разделение ответственности. Вы понимаете Ваше приложение и Ваш UI лучше, если пишете компоненты таким способом.</li>
+					<li>Лучшая реюзабельность. Вы можете использовать один и тот же глупый компонент с абсолютно разными источниками состояния.</li>
+					<li>Глупые компоненты — это фактически «палитра» Вашего приложения, Вы можете поместить их все на одну страницу и дать дизайнеру их настроить, на залезая в логику приложения. Вы можете запустить регрессивное тестирование на такой странице.</li>
+					<li>Это заставляет Вас извлекать «компоненты макеты», такие как Sidebar, Page, ContextMenu и использовать this.props.children вместо дублирования одной и той же верстки в различных умных компонентах.</li>
+				</ul>
+				<hr class="m-5">
+				<p><i>Комментарии в JSX</i>: можно использовать &lt;!-- ... --&gt;, но эти комментарии будутотображаться в DOM. Иначе надо использовать начало джеес кода + джеес комментарии { // ....} или { /* ...  */ }.</p>
+				<hr class="m-5">
+				<h3>Полезные ссылки:</h3>
+				<ul>
+					<li><a href="https://medium.com/web-standards/es-modules-cartoon-dive-71f42c1e851a">Глубокое погружение в ES-модули в картинках</a></li>
+					<li><a href="https://learn.javascript.ru/modules">Модули</a></li>
+					<li>Для удобства рекомендовано использование React DevTools</li>
+					<li><a href="https://github.com/uberVU/react-guide/blob/master/props-vs-state.md">props vs state</a></li>
+					<li><a href="https://habr.com/ru/post/358090/">Понимание жизненного цикла React-компонента</a></li>
+					<li><a href="https://habr.com/ru/post/266559/">Умные и глупые компоненты React</a></li>
+					<li><a href="https://medium.com/@nancydo7/understanding-react-16-4-component-lifecycle-methods-e376710e5157">статья про life-circle methods</a></li>
+					<li><a href="https://medium.com/@learnreact/container-components-c0e67432e005">Container component</a></li>
+				</ul>
+			</div>
+			<div class="col-12 pt-2 pb-2">
+					<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson3" role="button" aria-expanded="true" aria-controls="lesson3">Lesson #3: React. Advanced guide</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse" id="lesson3">
+				<h2>Продвинутые фишки реакта.</h2>
+				<h3>Refs (<a href="https://ru.reactjs.org/docs/refs-and-the-dom.html">https://ru.reactjs.org/docs/refs-and-the-dom.html</a>)</h3>
+				<p>В реакте мы не работаем непосредственно с DOM, потому, что в, работая с ним непосредственно, мы можем что-то изменить или повлиять на что-то, а реакт об этом не узнает. Но бывают ситуации, в которых нам, все же, необходимо работать с DOM, в этом случае надо ставить реакт в известность. Например, есть некая форма с инпутом, и кнопка, по клику на кнопку инпут должен фокусироваться. Используется редко.</p>
+				<p>Refs ассоциируются в конструкторе.</p>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react'
+import './App.css'
+
+import Refs from './Refs'
+
+class App extends Component {
+	render() {
+		return (
+			&lt;div&gt;
+				&lt;Refs/&gt;
+			&lt;/div&gt;
+		)
+	}
+}
+
+export default App
+</pre>
+				<p><i>Refs.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+
+export default class Refs extends Component {
+	constructor (props) {
+		super(props);
+		// ассоциация на DOM элемент, реферальная ссылка
+		this.myRef = React.createRef();
+	}
+
+	focus = (e) =&gt; {
+		e.preventDefault();
+		// теперь этот элемент доступен в this.myRef.current
+		this.myRef.current.focus();
+
+		// с ним можно работать, как с обычным элементом
+		console.log(this.myRef.current.value)
+	}
+
+	render() {
+		return (
+			&lt;form&gt;
+				&lt;input ref={this.myRef} type="text" /&gt;
+				&lt;button onClick={this.focus}&gt;Click&lt;/button&gt;
+			&lt;/form&gt;
+		)
+	}
+} 
+</pre>
+				<hr class="m-5">
+				<p>Альтернативный способ работы с DOM. Реакт рекомендует использовать createRef(), потому, как там есть какие-то внутреннние оптимизаторы. Как делалось раньше:</p>
+<pre class="p-2">import React, {Component} from 'react';
+
+export default class Refs extends Component {
+	focus = (e) =&gt; {
+		e.preventDefault();
+		this.myRef.focus();
+		console.log(this.myRef.value)
+	}
+
+	render() {
+		return (
+			&lt;form&gt;
+				&lt;input ref={(ref) =&gt; this.myRef = ref} type="text" /&gt;
+				&lt;button onClick={this.focus}&gt;Click&lt;/button&gt;
+			&lt;/form&gt;
+		)
+	}
+} 
+</pre>
+				<hr class="m-5">
+				<p>Дополнительные особенности:</p>
+				<p>Пусть у меня есть инпут и я хочу отдельную функцию для фокусировки на этом инпуте.</p>
+				<p><i>Input.js</i></p>
+<pre class="p-2">import React, { Components } from 'react'
+
+export default class Input extends Component {
+	constructor(props) {
+		super(props);
+		this.myRef = React.createRef();
+	}
+	focus = (e) =&gt; {
+		e.preventDefault();
+		this.myRef.current.focus();
+	}
+	render() {
+		return &lt;input ref={this.myRef} type="text" /&gt;
+	}
+}
+</pre>
+				<p><i>Refs.js</i></p>
+<pre class="p-2">import React, { Components } from 'react'
+import Input from './Input'
+
+export default class Refs extends Component {
+	constructor (props) {
+		super(props);
+		this.input = React.createRef();
+	}
+
+	focusInput = (e) =&gt; {
+		e.preventDefault();
+		// мы взываем к экземпляру класса, вызываем у него прописанный нами метод
+		this.input.current.focus();
+	}
+
+	render() {
+		return (
+			&lt;form&gt;
+				// ссылка на экземпляр класса
+				// вызываем функцию экземпляра класса 
+				&lt;Input ref={ this.input } /&gt;
+				&lt;button onClick={ this.focus }&gt;Click&lt;/button&gt;
+			&lt;/form&gt;
+		)
+	}
+}
+</pre>
+				<hr class="m-5">
+				<p>Refs можно создавать для двух типов элементов:</p>
+				<ul>
+					<li>Для DOM элементов.</li>
+					<li>Для компонентов, которые были написаны, как классы. В этом случае мы обращаемся к экземпляру класса и можем вызвать у него метод.</li>
+				</ul>
+				<p>При использовании функционального компонента можно использвать <a href="https://ru.reactjs.org/docs/forwarding-refs.html">перенаправление рефов</a>.</p>
+<pre class="p-2">import React, { Components } from 'react'
+
+const Input = React.forwardRef((props, ref) =&gt; () {
+	return &lt;input ref={ref} type="text"/&gt;
+})
+
+export default Input
+</pre>
+				<hr class="m-5">
+				<h3>Fragment (<a href="https://ru.reactjs.org/docs/fragments.html">https://ru.reactjs.org/docs/fragments.html</a>)</h3>
+				<p>Рендер возвращает всегда один DOM элемент, посему, все должно быть завернуто в этот один элемент...но не всегда он нам нужен. Фрагмент служит, как обертка, но в итоговом выводе его нет.</p>
+<pre class="p-2">import React, {Component, Fragment}  from 'react';
+
+export default class Tratata extends Component {
+	...
+
+	render () {
+		return &lt;Fragment&gt;
+			&lt;div&gt;...&lt;/div&gt;
+			&lt;div&gt;...&lt;/div&gt;
+			&lt;div&gt;...&lt;/div&gt;
+		&lt;/Fragment&gt;
+	}
+}
+</pre>
+				<p>Упрощенная запись <i>&lt;&gt; .... &lt;/&gt;</i>, но она не везде поддерживается.</p>
+				<hr class="m-5">
+				<h3>HOC или Higher Order Component (<a href="https://ru.reactjs.org/docs/higher-order-components.html">https://ru.reactjs.org/docs/higher-order-components.html</a>)</h3>
+				<p><i>Компонент высшего порядка</i> — это один из продвинутых способов для повторного использования логики. HOC не являются частью API React, но часто применяются из-за композиционной природы компонентов.</p>
+				<p><i>HOC</i> - это некая функция, которая возвращает новый компонент, который декорирует другой компонент.</p>
+				<p>Если во многих компонентах должна использоваться одна и та же логика, применяют <a href="https://ru.wikipedia.org/wiki/%D0%94%D0%B5%D0%BA%D0%BE%D1%80%D0%B0%D1%82%D0%BE%D1%80_(%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F)">паттерн декоратор</a>.</p>
+				<p>Декоратор — структурный шаблон проектирования, предназначенный для динамического подключения дополнительного поведения к объекту. Шаблон Декоратор предоставляет гибкую альтернативу практике создания подклассов с целью расширения функциональности.</p>
+				<p>Например, у нас есть куча разных компонентов, которые работают с пользователями (fake api). Создадим какой-то компонент, который будет работать с постами (posts).</p>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react'
+import './App.css'
+
+import HOC from './HOC'
+
+class App extends Component {
+	render() {
+		return (
+			&lt;div&gt;
+				&lt;HOC/&gt;
+			&lt;/div&gt;
+		)
+	}
+}
+
+export default App
+</pre>
+				<p><i>List.js</i></p>
+<pre class="p-2">import React from 'react';
+
+export default function List ({posts}) {
+	return &lt;ul&gt;
+		{posts.map(item =&gt; &lt;li key={ item.id }&gt;{ item.body }&lt;/li&gt;)}
+	&lt;/ul&gt;
+}
+</pre>
+				<p>Обычно НОС называют по его назначению, часто использую префикс "with" и с маленькой буквы. По сути, мы обернули существующий компонент и передали ему новые свойства. Стейт у НОС пишут редко, обычно передают новые пропсы компоненту, который мы оборачиваем. Еще, порой, передают какие-то стили или вывод в консоль, при получении новых пропсов. Будет применяться при работе с редаксом (редакс использует функции НОС). Суть - в оборачивании компонента, "расширении" старого компонента новыми свойствами.</p>
+				<p><i>HOC.js</i></p>
+<pre class="p-2">import React, { Component } from 'react';
+import List from 'List';
+
+function withPosts (EnheritComponent) {
+	return class WithPosts extends Component {
+		state = {
+			posts: []
+		}
+
+		async componentDidMount() {
+			const posts = await fetch('https://jsonplaceholder.typicode.com/posts')
+				.then(res =&gt; res.json())
+				.catch(error =&gt; {console.error(error)});
+
+				this.setState({posts});
+		}
+		
+		render () {
+			return &lt;EnheritComponent list={ this.posts } /&gt;
+		}
+	}
+}
+
+export default withPosts(List);
+</pre>
+				<p>Полезные ссылки:</p>
+				<ul>
+					<li><a href="https://habr.com/ru/company/ruvds/blog/428572/">Компоненты высшего порядка в React</a></li>
+					<li><a href="https://blog.bigbinary.com/2017/11/15/higher-order-component-for-rendering-spinner-in-react-native-app.html">Higher Order Component for rendering spinner in React Native app</a></li>
+				</ul>
+				<hr class="m-5">
+				<h3>Render props (<a href="https://ru.reactjs.org/docs/render-props.html">https://ru.reactjs.org/docs/render-props.html</a>)</h3>
+				<p>Термин «рендер-проп» относится к возможности компонентов React разделять код между собой с помощью пропа, значение которого является функцией.</p>
+				<p>Компонент с рендер-пропом берёт функцию, которая возвращает React-элемент, и вызывает её вместо реализации собственного рендера.</p>
+				<p>Например, у нас есть разные страницы, у которых одинаковые хедер и футтер, только содержимое сайдбара изменяется. В этом случаем мы измененным передаем только контент сайдбара. В одном случае в контент должен выводится список каталогов, во втором - список товаров. Мы будем передават разные элементы.</p>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react'
+import './App.css'
+
+import RenderProps from './RenderProps'
+
+class App extends Component {
+	render() {
+		return (
+			&lt;div&gt;
+				&lt;RenderProps/&gt;
+			&lt;/div&gt;
+		)
+	}
+}
+
+export default App
+</pre>
+				<p><i>Layout.js</i></p>
+<pre class="p-2">import React, { Component } from 'react';
+
+// элементы, которые мы хотим отрисовать
+const list = ['a', 'b', 'c'];
+
+export default class Layout extends Component {
+	render() {
+		// как выглядит компонент - определает родитель, мы просто передаем данные
+		return &lt;div&gt;
+			{ this.props.header }
+			{ this.props.sidebar(list) }
+		&lt;/div&gt;
+	}
+}
+</pre>
+				<p><i>RenderProps.js</i></p>
+<pre class="p-2">import React from 'react';
+
+import Layout from 'Layout';
+
+export default function RenderProps() {
+	return &lt;Layout 
+		sidebar={() =&gt; {
+				return &lt;ul&gt;
+					{ data.map(item =&gt; &lt;li key={ item }&gt;{ item }&lt;/li&gt;) }
+				&lt;/ul&gt;
+			}
+		}
+		header={&lt;div&gt;Amazing Header&lt;/div&gt;}
+	/&gt;
+}
+</pre>
+				<p><i>Итого:</i> мы, зараннее, в родителе, определили, как быдет выглядеть этот элемент, т.е. он будет выглядеть, как красивый список, а данные мы уже получает от ребенка,но родитель определает, как это будет выглядеть. Ребенок просто отрисовывает эти пропсы и передает им данные (может и не передавать данные, если, например, у нас в лаяуте лежит хедер, который одинаков для всех страниц).</p>
+				<hr class="m-5">
+				<h3>Condition render (вывод по условию)</h3>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react'
+import './App.css'
+
+import ConditionRender from './ConditionRender'
+
+class App extends Component {
+	render() {
+		return (
+			&lt;div&gt;
+				&lt;ConditionRender/&gt;
+			&lt;/div&gt;
+		)
+	}
+}
+
+export default App
+</pre>
+				<p><i>ConditionRender.js</i></p>
+				<p>Пусть у нас есть некий item, который, на основании входящих пропсов(type), может отдать тот или иной контент.</p>
+<pre class="p-2">import React from 'react';
+
+const components = {
+	input: &lt;input/&gt;,
+	button: &lt;button/&gt;
+};
+export default function Item({type}) {
+	const Elem = components[type];
+
+	return Elem;
+}
+</pre>
+				<hr class="m-5">
+				<h3>Порталы (<a href="https://ru.reactjs.org/docs/portals.html">https://ru.reactjs.org/docs/portals.html</a>)</h3>
+				<p>Порталы позволяют рендерить дочерние элементы в DOM-узел, который находится вне DOM-иерархии родительского компонента. Используются редко.</p>
+<pre class="p-2">ReactDOM.createPortal(child, container)
+</pre>
+				<p>Первый аргумент (child) — это любой React-компонент, который может быть отрендерен, такой как элемент, строка или фрагмент. Следующий аргумент (container) — это DOM-элемент.</p>
+				<hr class="m-3">
+				<p>Может использоваться, например, при работе с админкой ВП. Все написано на ВП, но наш крутой компонент - на реакте и из этого плагина надо редактировать что-то вне реакта. Простой getElementById не сделает удаленный элемент реактивным, а портал - сделает. Также может применяться для модалок.</p>
+				<p><i>index.html</i></p>
+<pre class="p-2">...
+&lt;body&gt;
+	// элемент, куда рендерится наше приложение
+	&lt;div id="root"&gt;&lt;/div&gt;
+
+	// модальное окно
+	&lt;div id="modal"&gt;&lt;/div&gt;
+&lt;/body&gt;
+...
+</pre>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react'
+import './App.css'
+
+import Portal from './Portal'
+
+class App extends Component {
+	render() {
+		return (
+			&lt;div&gt;
+				&lt;Portal/&gt;
+			&lt;/div&gt;
+		)
+	}
+}
+
+export default App
+</pre>
+				<p><i>Portal.js</i></p>
+<pre class="p-2">import React, { Component } from 'react';
+
+// для использования портала это необходимо
+import ReactDOM from 'react-dom';
+
+
+// возьмем этот компонент для примера
+import Refs from 'Refs';
+
+export default function PortalExample() {
+	return &lt;Refs/&gt;
+
+	return ReactDOM.createPortal(
+		// что отрисуем (здесь можно передать пропсы)
+		&lt;Refs/&gt;,
+		// куда
+		document.getElementById('modal')
+	);
+}
+</pre>
+				<hr class="m-5">
+				<p>Если необходимо открывать/закрывать меню/модалки, то правиль это делать так:</p>
+<pre class="p-2">import React, { Component } from 'react';
+
+export default function Dialog({isOpened}) {
+	return &lt;div style{{display: isOpened ? 'block' : 'none'}}&gt;
+		text
+	&lt;/div&gt;
+}
+</pre>
+				<hr class="m-5">
+				<h3>Передача контекста (<a href="https://ru.reactjs.org/docs/context.html">https://ru.reactjs.org/docs/context.html</a>)</h3>
+				<p>Контекст позволяет передавать данные через дерево компонентов без необходимости передавать пропсы на промежуточных уровнях.</p>
+				<p>Контекст разработан для передачи данных, которые можно назвать «глобальными» для всего дерева React-компонентов (например, текущий аутентифицированный пользователь, UI-тема или выбранный язык). </p>
+				<p>Если вы хотите избавиться от передачи некоторых пропсов на множество уровней вниз, обычно <a href="https://ru.reactjs.org/docs/composition-vs-inheritance.html">композиция компонентов</a> является более простым решением, чем контекст.</p>
+				<hr class="m-5">
+				<p><i>theme-context.js</i></p>
+<pre class="p-2">export const themes = {
+	light: {
+		foreground: '#000000',
+		background: '#eeeeee',
+	},
+	dark: {
+		foreground: '#ffffff',
+		background: '#222222',
+	},
+};
+
+// экспорт контекста
+export const ThemeContext = React.createContext(
+	themes.dark // значение по умолчанию
+);
+</pre>
+				<p><i>themed-button.js</i></p>
+<pre class="p-2">import {ThemeContext} from './theme-context';
+
+class ThemedButton extends React.Component {
+	render() {
+	let props = this.props;
+	let theme = this.context;
+	return (
+		// при вызове контекст будет браться из заданного контекста
+		&lt;button
+			{...props}
+			
+			style={{backgroundColor: theme.background}}
+		/&gt;
+	);
+	}
+}
+ThemedButton.contextType = ThemeContext;
+
+// для кнопки мы должны задать статическое свойство contextType и его значение - значение объявленного контекста
+export default ThemedButton;
+</pre>
+				<p><i>App.js</i></p>
+<pre class="p-2">import {ThemeContext, themes} from './theme-context';
+import ThemedButton from './themed-button';
+
+// Промежуточный компонент, который использует ThemedButton
+function Toolbar(props) {
+	return (
+	&lt;ThemedButton onClick={props.changeTheme}&gt;
+		Change Theme
+	&lt;/ThemedButton&gt;
+	);
+}
+
+class App extends React.Component {
+	constructor(props) {
+	super(props);
+	this.state = {
+		theme: themes.light,
+	};
+
+	this.toggleTheme = () =&gt; {
+		this.setState(state =&gt; ({
+		theme:
+			state.theme === themes.dark
+			? themes.light
+			: themes.dark,
+		}));
+	};
+	}
+		
+	render() {
+	// ThemedButton внутри ThemeProvider использует
+	// значение светлой UI-темы из состояния, в то время как
+	// ThemedButton, который находится вне ThemeProvider,
+	// использует тёмную UI-тему из значения по умолчанию
+	return (
+		&lt;Page&gt;
+			// провайдер - тот, кто будет отдавать данные, изначальное его значение лежит в репеменной this.state.theme
+			&lt;ThemeContext.Provider value={this.state.theme}&gt;
+				// вызываем тулбар, в котором лежит кнопка, мы передаем функцию для изменения темы, тему не передаем
+				&lt;Toolbar changeTheme={this.toggleTheme} /&gt;
+			&lt;/ThemeContext.Provider&gt;
+			&lt;Section&gt;
+				&lt;ThemedButton /&gt;
+			&lt;/Section&gt;
+		&lt;/Page&gt;
+	);
+	}
+}
+
+ReactDOM.render(<app>, document.root);
+</app></pre>
+				<p>Минусом использования является непонимание дочерним элементом того, откуда нам  приходят значения.</p>
+				<p>У приложения может быть несколько контекстов и они могут быть вложенные. Элемент будет искать ближайший контекст наверху.</p>
+				<hr class="m-5">
+				<h3>Hooks (<a href="https://ru.reactjs.org/docs/hooks-intro.html">https://ru.reactjs.org/docs/hooks-intro.html</a>)</h3>
+				<p>Только вышла из бета-версии.</p>
+				<p><i>Хуки</i> — нововведение в React 16.8, которое позволяет использовать состояние и другие возможности React без написания классов. Хук — это специальная функция, которая позволяет «подцепиться» к возможностям React. Например, хук useState предоставляет функциональным компонентам доступ к состоянию React. Мы узнаем про другие хуки чуть позже.</p>
+				<h4>useState (<a href="https://ru.reactjs.org/docs/hooks-state.html">https://ru.reactjs.org/docs/hooks-state.html</a>)</h4>
+				
+				<p>Функциональные компоненты более выгодны для произволительности, чем компоненты, основанные на классах, потому, что не наследуют кучу всяко-разного.</p>
+				<p>Хуки - упрощенный синтаксис работы со стейтом.</p>
+				<hr class="m-5">
+				<h4>useEffect (<a href="https://ru.reactjs.org/docs/hooks-effect.html">https://ru.reactjs.org/docs/hooks-effect.html</a>)</h4>
+				<p>Хук эффекта даёт вам возможность выполнять побочные эффекты в функциональном компоненте. Используется вместо componentDidMount и componentDidUpdate.</p>
+				<p>Если useEffect что-то возвращает, то это сработает тогда, когда функция отмонтируется (аналог componentWillUnmount)!</p>
+				<p>Нельзя использовать useEffect внутри условий или for, потому, что, заходя в функцию очередность useEffects запоминается и выполняется по порядку. Нужно использвать условия внутри useEffect.</p>
+				<hr class="m-5">
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react'
+import './App.css'
+
+import Hooks from './Hooks'
+
+class App extends Component {
+	render() {
+		return (
+			&lt;div&gt;
+				&lt;Hooks/&gt;
+			&lt;/div&gt;
+		)
+	}
+}
+
+export default App
+</pre>
+				<p><i>Hooks.js</i></p>
+<pre class="p-2">import React, { useState } from 'react';
+
+export default function Hooks() {
+	// Объявление переменной состояния, которую мы назовём "count"
+	// count - переменная, аналог стейта, setCount - функция, которая работает/изменяет этот count, аналогична setState
+	const [count, setCount] = useState(0);
+
+	// переменных, подобных каунту может быть много
+	const [number, setNumber] = useState(0);
+
+	// хук эффекта, можно использовать разные useEffects
+	useEffect(() =&gt; {
+		// Обновляем заголовок документа с помощью API браузера
+		document.title = `Вы нажали ${count} раз`;
+	});
+
+	useEffect(() =&gt; {
+		consoe.log(number, count);
+	});
+
+	return (
+		&lt;div&gt;
+			&lt;p&gt;Вы кликнули {count} раз&lt;/p&gt;
+			&lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+			Нажми на меня
+			&lt;/button&gt;
+
+			&lt;p&gt;Вы кликнули {number} раз&lt;/p&gt;
+			&lt;button onClick={() =&gt; setNumber(number + 1)}&gt;
+			Нажми на меня
+			&lt;/button&gt;
+		&lt;/div&gt;
+	);
+}
+</pre>
+				<hr class="m-5">
+			</div>
+			<div class="col-12 pt-2 pb-2">
+					<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson4" role="button" aria-expanded="true" aria-controls="lesson4">Lesson #4: Node.js</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse" id="lesson4">
+				<h2>Основы Node.js</h2>
+				<p><i>Node.js</i> - это движок, который позволяет монтировать JavaScript в код, который понимает компьютер.</p>
+				<p><b>Node</b> или <b>Node.js</b> (<a href="https://ru.wikipedia.org/wiki/Node.js">https://ru.wikipedia.org/wiki/Node.js</a>) — программная платформа, основанная на движке V8 (транслирующем JavaScript в машинный код), превращающая JavaScript из узкоспециализированного языка в язык общего назначения. Node.js добавляет возможность JavaScript взаимодействовать с устройствами ввода-вывода через свой API (написанный на C++), подключать другие внешние библиотеки, написанные на разных языках, обеспечивая вызовы к ним из JavaScript-кода. Node.js применяется преимущественно на сервере, выполняя роль веб-сервера, но есть возможность разрабатывать на Node.js и десктопные оконные приложения (при помощи NW.js, AppJS или Electron для Linux, Windows и macOS) и даже программировать микроконтроллеры (например, tessel и espruino). В основе Node.js лежит событийно-ориентированное и асинхронное (или реактивное) программирование с неблокирующим вводом/выводом.</p>
+				<hr class="m-5">
+				<h3>Событийный цикл Node.js</h3>
+				<p>Библиотека libUV ( интерпритатор) написана на языке С и встроена в сервер Node.js. К этой библиотеке не надо обращаться каким-то явным образом. Библиотека libUV отвечает за две принципиально важные вещи. Первое – это кроссплатформенные операции ввода-вывода, работа с файлами, работа с сетью. Мы через JavaScript даем команду Node.js просчитать какой-то файл или отправить данные по сети. А Node.js чтобы это сделать уже внутри себя использует библиотеку libUV. Таким образом, libUV отвечает за кроссплатформенную реализацию этих функций. Именно она уже знает, как работать с Windows, Linux и т.д. </p>
+				<p>Вторая область ответственности libUV это поддержка основного событийного цикла Node.js. Оказывается, когда мы запускаем какой-то скрипт, то он запускается в режиме цикла. Этот цикл чередует выполнение JavaScript, который обеспечивается виртуальной машиной V8 с ожиданием различных событий: ввода-вывода, срабатыванием таймеров, за которые также отвечает библиотека libUV. Этот цикл будет продолжаться до тех пор, пока возможно появление каких-то новых событий, ввода-вывода или таймера, которые нужно будет обработать.</p>
+				<p>Подробнее тут - <a href="https://blog.soshace.com/ru/2016/10/03/node-js-lessons-event-libuv-pt1/">https://blog.soshace.com/ru/2016/10/03/node-js-lessons-event-libuv-pt1/</a> и <a href="https://blog.insiderattack.net/handling-io-nodejs-event-loop-part-4-418062f917d1">https://blog.insiderattack.net/handling-io-nodejs-event-loop-part-4-418062f917d1</a>.</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/3.jpg" alt="core of Node.js"></p>
+				<p>... и тут <a href="https://blog.insiderattack.net/handling-io-nodejs-event-loop-part-4-418062f917d1">https://blog.insiderattack.net/handling-io-nodejs-event-loop-part-4-418062f917d1</a>.</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/nodejs-eventloop.png" alt="core of Node.js"></p>
+				<hr class="m-5">
+				<h4>Архитектура Node.js (<a href="https://codeburst.io/all-about-node-js-you-wanted-to-know-25f3374e0be7">https://codeburst.io/all-about-node-js-you-wanted-to-know-25f3374e0be7</a>)</h4>
+				<p class="mt-4"><img src="file:///Users/kate/Documents/_react/compendium/images/event-loop-node.jpeg" alt="Node.js system"></p>
+				<hr class="m-5">
+				<h4>Event loop</h4>
+				<p class="mt-4 mb-4"><img src="file:///Users/kate/Documents/_react/compendium/images/loop.png" alt="loop"></p>
+				<p>Node.js event loop (<a href="https://www.c-sharpcorner.com/article/node-js-event-loop/">https://www.c-sharpcorner.com/article/node-js-event-loop/</a>) немного похож на тот, что есть в браузере.</p>
+				<p><strong>Step 1:</strong> Есть некоторая очередь, куда попадают коллбеки, после чего, ивентлуп обрабатывает по одному колбеку, отправляет на выполнение опереционной системе, возвращает результат.</p>
+				<p><strong>Step 2:</strong> Hа диаграмме видно, что существует один цикл, который всегда проверяет, доступно ли какое-либо событие или запрос в очереди событий или нет. Если есть какие-либо запросы, то в соответствии со свойством очереди «First Come, First Served», запросы будут обслуживаться.</p>
+				<p><strong>Step 3:</strong> Цикл событий Node.js является однопоточным и выполняет неблокирующие задачи ввода-вывода, поэтому он отправляет запросы во внутренний пул потоков C ++, где можно запустить множество потоков. Этот внутренний пул потоков C ++ является частью цикла обработки событий, разработанного в Libuv. Это может обрабатывать несколько запросов. Теперь цикл событий проверяет снова и снова, есть ли какое-либо событие в очереди событий. Если есть, то он служит пулу потоков, если там идет процесс блокировки.</p>
+				<p><strong>Step 4:</strong> Внутренний пул потоков обрабатывает много запросов, таких как запрос к базе данных, запрос файла и многие другие.</p>
+				<p><strong>Step 5:</strong> Всякий раз, когда какой-либо поток завершает эту задачу, функция обратного вызова вызывает и отправляет ответ обратно в цикл событий.</p>
+				<p><strong>Step 6:</strong> Цикл обработки событий отправляет ответ клиенту, чей запрос выполнен.</p>
+				<hr class="m-5">
+				<p>Для работы необходимо установить последнюю версию (node -v - проверка текущей версии).</p>
+				<p>В Node.js ест ряд библиотек (<a href="https://nodejs.org/api/">https://nodejs.org/api/</a> - список в сайдбаре) для работы с операционой системой, сетью и пр. Обычно не очень удобно просто использовать нативные библиотеки, поэтому существуют фреймверки. Один из самых популярных - <b>Express</b>.</p>
+				<hr class="m-5">
+				<h3>Express (<a href="https://expressjs.com/">https://expressjs.com/</a>)</h3>
+				<p>Начало работы:</p>
+<pre class="p-2">npm init // init of new task
+
+npm install express --save
+</pre>
+				<p>Создаем в рабочей папке index.js.</p>
+				<p>Есть определенные вещи, которые Node.js еще не поддерживает (у них ряд внутренних причин для этого), например, не поддерживаются импорты и экпорты. Поддерживается ES6 - const, spread operator, etc. Если браузер что-то поддерживает, этоне значит, что и Node тоже.</p>
+				<p>Начало работы (<a href="https://expressjs.com/en/starter/hello-world.html">https://expressjs.com/en/starter/hello-world.html</a>):</p>
+<pre class="p-2">// импорт экспресса, создаем инстанс экспресса
+const express = require('express')
+
+// создаем наше приложение
+const app = express()
+
+// назначение порта, на котором будет работать наш сервер
+const port = 3000
+
+
+app.get('/', (req, res) =&gt; res.send('Hello World!'))
+
+// для запуска приложения мы просим "слушать" наш порт...и задаем колбек, который выполнится после загрузки этого сервера
+app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+</pre>
+				<p>Вернемся к ивент лупу. Когда есть какое-то событие, например, колбек, оно обрабатывается и работа заканчивается.</p>
+				<p>Для запуска любого файла нужно написать:</p>
+<pre class="p-2">node nameOfFile.js // имя файла, который мы хотим запустить
+</pre>
+				<p>...файл запускается, выполняется и управление передается назад операционной системе. Когда мы поднимаем сервер, мы добавляем слово "listen" - мы говорим серверу не закрывать ивент луп. Будет постоянно посматривать, есть ли что-то, с чем поработать. Сервер будет все время поднят и он будет все время слушаться на том порту, который мы указали.</p>
+				<p>После запуска goto <a href="http://localhost:3000/">http://localhost:3000/</a> (или на тот порт, который был указан).</p>
+				<hr class="m-5">
+				<h3>Написание роутов</h3>
+				<p><i>Роут</i> - некорый путь, на который может заходить пользователь и что-то получать в ответ.</p>
+				<p>Пример:</p>
+<pre class="p-2">app.get('/', (req, res, next) =&gt; res.send('Hello World!'))
+</pre>				
+				<p>Здесь после app - <i>название метода</i> (их много - читай первый урок).</p>
+				<p>Далее - <i>url</i>, по которому мы собираемся отвечать, т.е. если зайдут на этот урл - будет вызван последующий колбек.</p>
+				<p>Колбек принимает 3 параметра:</p>
+				<ul>
+					<li><i>req (request)</i> - запрос (вся информация), который пришел от пользователя;</li>
+					<li><i>res (response)</i> - то, как мы будем отвечать пользователю;</li>
+					<li><i>next</i> - передача управления в следующую функцию.</li>
+				</ul>
+				<p>В примере мы в колбеке работаем с респонсом, и говорим, что мы хотим ответить пользователю сообщением "Привет, мир!". Ответ пойдет только тогда, когда пользоватеот увидить что-либо, связанное с "send".</p>
+				<p>Есть несколько способов ответа пользователю:</p>
+				<ul>
+					<li><i>send</i> - просто отправляет строку.</li>
+					<li><i>json</i> - отправляет объект, который преобразуется в json.</li>
+					<li><i>end</i> - просто завершает соединение, без какой-либо информации.</li>
+				</ul>
+				<p>В одном колбеке можно использовать можно только какой-то один способ. Что первое встретит, то и обраьотает.</p>
+<pre class="p-2">app.get('/', (req, res, next) =&gt; {
+	res.send('Hello World!');
+	res.json({text: 'tratata'});
+	res.end();
+})
+</pre>	
+				<p>Роутов для сервера может быть очень много, часто неудобно их все хранить в index.js, смешивается логика, но при этом (обратить внимание), что методы вызываются у app. Поэтому часто в других файлах пишут функции, которые принимают app и потом манипулируют им (так часто делают люди, которые пришли из других языков). Но это не совсем верно, потому, что экспресс придумал решение этой проблемы.</p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+
+// define the home page route
+router.get('/', function (req, res) {
+	res.send('Birds home page')
+})
+// define the about route
+router.get('/about', function (req, res) {
+	res.send('About birds')
+})
+
+// экспорт роутера (дефолтное значение)
+module.exports = router
+
+// если я не хочу дефолтное значение
+module.exports.variable = 5
+</pre>
+				<hr class="m-5">
+				<p>Создадим новый файл <i>routes.js</i> (<a href="https://expressjs.com/en/guide/routing.html">https://expressjs.com/en/guide/routing.html</a>).</p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+
+router.get('/category', function (req, res) {
+	// здесь может быть любой код
+
+	// это не ретерн, код ниже будет выполнен, просто здесь мы отдаем ответ пользователю
+	res.json(['Phone', 'Laptop', 'Monitor']) 
+
+	// здесь может быть любой код
+})
+
+router.get('/product', function (req, res) {
+	res.send('Here are products')
+})
+
+module.exports = router
+</pre>
+				<p><i>index.js</i> с подключением роутсов.</p>
+<pre class="p-2">const express = require('express')
+const app = express()
+const port = 3000
+
+// импорт роутов
+const routes = require('./rourtes')
+
+// для начало использования роутсов
+app.use(routes)
+
+app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+</pre>
+				<p>В итоге, по адресам http://localhost:3000/product и http://localhost:3000/category мы получаем делаемые результаты.</p>
+				<hr class="m-5">
+				<h3>Промежуточные функции - middleware (<a href="https://expressjs.com/en/guide/writing-middleware.html">https://expressjs.com/en/guide/writing-middleware.html</a>)</h3>
+				<p>Подключить промежуточные функции можно двумя способами. Первый вариант, применение миддлвеа к конкретному роуту:</p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+
+function showQuery(req, res, next) {
+	console.log(req.query)
+	// передача управления в следующую функцию
+	next();
+}
+
+// здесь можно вызвать неограниченное количество миддлвеа
+router.get('/category', showQuery, function (req, res) {
+	res.json(['Phone', 'Laptop', 'Monitor'])
+})
+module.exports = router
+</pre>
+				<p>После написания реквеста, типа <i>http://localhost:3000/category?page=1</i>, в консоли получим <i>{ page: '1' }</i>.</p>
+				<p>Если нам необходимо применить миддлвеа для всех роутов (например, для авторизации):</p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+
+function showQuery(req, res, next) {
+	console.log(req.query)
+	// передача управления в следующую функцию
+	next();
+}
+
+router.use(showQuery)
+
+router.get('/category', function (req, res) {
+	res.json(['Phone', 'Laptop', 'Monitor'])
+})
+module.exports = router
+</pre>
+				<p>В этом случае миддвеа применится ко всем роутам, которые прописаны ниже use, но не к некому роуту, прописанному выше use.</p>
+				<hr class="m-5">
+				<h4>Обработка 404</h4>
+				<p><i>index.js</i></p>
+<pre class="p-2">const express = require('express')
+const app = express()
+const port = 3000
+
+// импорт роутов
+const routes = require('./rourtes')
+
+// для начало использования роутсов
+app.use(routes)
+
+// в эту функцию скрипт зайдет в любом случае (она последняя)
+app.use((req, res, next) =&gt; {
+	// установка ошибки
+	res.status(404)
+
+	// отвечаем
+	res.json({error: 'Not found'})
+
+	// можно чейнить &gt;&gt; res.status(404).json({error: 'Not found'})
+})
+
+app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+</pre>
+				<p>Заданную ошибку можно увидеть devtools &gt; network.</p>
+				<hr class="m-5">
+				<p>Если выпадает ошибка:</p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+
+function showQuery(req, res, next) {
+	console.log(req.query)
+	// передача управления в следующую функцию
+	next();
+}
+
+router.use(showQuery)
+
+router.get('/category', function (req, res) {
+	// эмуляция ошибки
+	throw new Error('Smth');
+
+	res.json(['Phone', 'Laptop', 'Monitor'])
+})
+
+module.exports = router
+</pre>
+				<p>При переходе на http://localhost:3000/category:</p>
+<pre class="p-2">Error: Smth
+	at /Users/kate/Documents/_react/server/rourtes.js:11:11
+	at Layer.handle [as handle_request] (/Users/kate/Documents/_react/server/node_modules/express/lib/router/layer.js:95:5)
+	at next (/Users/kate/Documents/_react/server/node_modules/express/lib/router/route.js:137:13)
+	at showQuery (/Users/kate/Documents/_react/server/rourtes.js:6:5)
+	at Layer.handle [as handle_request] (/Users/kate/Documents/_react/server/node_modules/express/lib/router/layer.js:95:5)
+	at next (/Users/kate/Documents/_react/server/node_modules/express/lib/router/route.js:137:13)
+	at Route.dispatch (/Users/kate/Documents/_react/server/node_modules/express/lib/router/route.js:112:3)
+	at Layer.handle [as handle_request] (/Users/kate/Documents/_react/server/node_modules/express/lib/router/layer.js:95:5)
+	at /Users/kate/Documents/_react/server/node_modules/express/lib/router/index.js:281:22
+	at Function.process_params (/Users/kate/Documents/_react/server/node_modules/express/lib/router/index.js:335:12)
+</pre>
+				<p>На фронтенде подобные вещи обрабатывать неудобно, поэтому есть специальная <strong>функция для работы с ошибками</strong>, особенность ее в том, что она принимает 4 параметра.</p>
+<pre class="p-2">app.use((err, req, res, next) =&gt; {
+	res.status(404).json({error: 'Not found'})
+})
+</pre>
+				<p>Результатом подобной обработки будет <i>{"error":"Not found"}</i>. Внутри этой функции мы можем сделать обработчики ошибки, можем как-то ответить пользователю.</p>
+				<p><strong>Эта функция обязательно должна быть последней!</strong></p>
+<pre class="p-2">app.use((err, req, res, next) =&gt; {
+	console.error(err)
+	if (!err.code) {
+		// неведомая ошибка сервера
+		res.status(500)
+	}
+	res.json({error: 'Oups! Something happen'})
+})
+</pre>
+				<hr class="m-5">
+				<p>Если мы пишем код и осознаем, что в какой-то момент может возникнуть ошибка. Например, мы хотим получить конкретный альбом по какому-то id. id мы будем передавать в параметрах.</p>
+				<p><i>index.js</i></p>
+<pre class="p-2">const express = require('express')
+const app = express()
+const port = 3000
+
+const routes = require('./rourtes')
+app.use(routes)
+
+app.use((err, req, res, next) =&gt; {
+	if  (!err.code) {
+		res.status(500)
+	} else {
+		res.status(err.code)
+	}
+	res.json({error: 'Not found'})
+})
+
+app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+</pre>
+				<p><i>routes.js</i></p>
+				<p>Если в <b>next</b> передать какой-либо параметр, то автоматом перейдет в обработчик ошибок.</p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+
+const albums = [
+	{ "userId": 1, "id": 1, "title": "quidem molestiae enim" },
+	{ "userId": 1, "id": 2,  "title": "sunt qui excepturi placeat culpa" },
+	{ "userId": 1, "id": 3,  "title": "omnis laborum odio" },
+	{ "userId": 1, "id": 4,  "title": "non esse culpa molestiae omnis sed optio" },
+	{ "userId": 1, "id": 5,  "title": "eaque aut omnis a" }
+];
+
+router.get('/album/:id', function(req, res, next) {
+    // не забываем про типы данных!
+    const album = albums.find(({ id }) =&gt; req.params.id === id.toString())
+
+    if (!album) {
+		// можно сделать throw Error....
+		// можно установить статус и т.д. здесь, но! лучше использовать next c параметром.
+
+		const error = new Error('Album not found!')
+		error.code = 404
+		next(error)
+	}
+    
+    res.json(album)
+})
+
+module.exports = router
+</pre>
+				<hr class="m-5">
+				<h3>Post</h3>
+<pre class="p-2 mt-3">routes.post('/category', function(req, res) {
+	res.json({ status: 'ok' })
+})
+</pre>
+				<p>Для эмуляции post можно воспользоваться программой Postman. Убедитесь, что на выбрана вкладка Body / raw + json. </p>
+				<p class="mt-4"><img src="file:///Users/kate/Documents/_react/compendium/images/Postman1.png" alt="postman settings"></p>
+				<p>Для передачи некого бади (пост же, все-таки) в поле запроса меняем параметры:</p>
+				<p class="mt-4"><img src="file:///Users/kate/Documents/_react/compendium/images/Postman2.png" alt="postman settings"></p>
+				<hr class="m-5">
+				<h4>body-parser (<a href="https://expressjs.com/en/guide/error-handling.html">https://expressjs.com/en/guide/error-handling.html</a>)</h4>
+				<p>Экспресс не умеер просто так парсить body, для этого необходимо использовать библиотеку <b>'body-parser'</b>.</p>
+				<p>Необходима для каждого проекта. Требует установки.</p>
+<pre class="p-2">npm install body-parser
+</pre>
+				<p>Добавлять перед роутами, потому, что это - тоже миддлвеа.</p>
+<pre class="p-2">const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
+
+// кодирует урл...неважно для понимания, но добавлять надо
+app.use(bodyParser.urlencoded({
+	extended: true
+}))
+// эта запись говорит о том, что оно парсит все бади в джейсон из изначальной строки (можно еще в xml, но не нужно)
+app.use(bodyParser.json())
+
+app.use(methodOverride())
+app.use(function (err, req, res, next) {
+	// logic
+})
+</pre>
+				<hr class="m-5">
+				<h3>Движки Экспресса (<a href="https://expressjs.com/en/guide/using-template-engines.html">Using template engines with Express</a>)</h3>
+				<p>REST API не отдает монолитный html, но, если необходимо написать монолитное приложение, которое сразу отвечает каким-то html. В экспрессе можно подклбчить "движки". С их помощью можно писать с помощью движков или темплейтов (Pug, Mustache, EJS).</p>
+				<p>После установки движка</p>
+<pre class="p-2">// например
+npm install pug --save
+</pre>
+				<p>применяем его:</p>
+<pre class="p-2">app.set('view engine', 'pug')
+</pre>
+				<p>Затем можно создавать pug файлы. Пусть будет index.pug.</p>
+<pre class="p-2">html
+head
+	title= title
+body
+	h1= message
+</pre>
+				<p>Затем создается маршрут для вывода файла pug. Если свойство view engine не задано, необходимо указать расширение файла view. В противном случае, можно не указывать расширение.</p>	
+<pre class="p-2">app.get('/', function (req, res) {
+	res.render('index', { title: 'Hey', message: 'Hello there!'});
+});
+</pre>
+				<p>При выполнении запроса к домашней странице файл index.pug будет отображаться как HTML.</p>				
+				<hr class="m-5">
+				<p><a href="file:///Users/kate/Documents/_react/compendium/index.html#">Документация по API (</a><a href="https://expressjs.com/en/4x/api.html">https://expressjs.com/en/4x/api.html</a>)</p>
+				<hr class="m-5">
+				<p>Объект request, который приходит в роут - <a href="https://expressjs.com/ru/4x/api.html#req">https://expressjs.com/ru/4x/api.html#req</a></p>
+				<hr class="m-5">
+				<h4>Плагин для разрешения кросс-доменных запросов (CORS)</h4>
+				<p>Плагин называется <a href="https://www.npmjs.com/package/cors">cors</a> (npm i cors). Подключение:</p>
+<pre class="p-2">const cors = require('cors')
+
+app.use(cors())
+</pre>
+				<p>В этом случае разрешается все, по-хорошему, надо передавать какие-то параметры, которые разрешат взаимодействие не всем.</p>
+				<p>Помимо cors еще рекомендуется использовать библиотеку <a href="https://github.com/helmetjs/helmet">helmet</a>, она позволит несколько защититься от атак, лучше всегда ее устанавливать ни смотря ни на что. Эту библиотеку подключают до роутов, чтобы она имела смысл.</p>
+				<p>Полезное:</p>
+				<ul>
+					<li><a href="https://grishaev.me/cors/">Руководство по кросс-доменным запросам (CORS)</a></li>
+				</ul>
+				<hr class="m-5">
+				<h2>Основы работы с MongoDB</h2>
+				<p>Установка имеет ряд особенностей...го ту <a href="https://www.mongodb.com/">документация</a>.</p>
+				<p>После установки надо запустить. При запуске создается сервер с некой БД и к ним можно обращаться. Запуск у меня командой 'mongo' из консоли. (Показать/скрыть скрытые файлы -&gt; command + shift + . ). После запуска оно должно просто висеть.</p>
+				<p>Библиотека для написания серверных запросов - <a href="https://mongoosejs.com/">mongoose</a>.</p>
+				<p>Дополнительно есть пакет для всех ОС - <a href="https://www.npmjs.com/package/nodemon">nodemon</a>, который сам рестартит сервер при работе с Node.js. Для запуска:</p>
+<pre class="p-2">nodemon index.js // имя файла, за которым надо следить
+</pre>
+				<hr class="m-5">
+				<p>Обычно сервер запускают из package.json. Например:</p>
+<pre class="p-2">{
+	"name": "server",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"dependencies": {
+		"brew": "0.0.8",
+		"express": "^4.17.1",
+		"mongoose": "^5.6.4",
+		"nodemon": "^1.19.1"
+	},
+	"devDependencies": {
+		"body-parser": "^1.19.0"
+	},
+	"scripts": {
+		"start:server": "nodemon server"
+	},
+	"author": "",
+	"license": "ISC"
+}
+</pre>
+				<p>Для поключения БД к нашему серверу делается отдельный файл db.js.</p>
+<pre class="p-2">const mongoose = require('mongoose');
+
+function connect() {
+	// здесь 'test' - название БД
+    mongoose.connect('mongodb://localhost:27017/reactNode', {useNewUrlParser: true});
+}
+
+module.exports = connect
+</pre>
+				<p>Подключение БД к нашему серверу (index.html):</p>
+<pre class="p-2">const db = require('./db.js')
+
+db()
+</pre>
+				<p>Для того, чтобы работать с помощью мангуса с БД, необходимо определить "модели" коллекций (в монгоДБ не таблицы, а коллекции...и тут не записи, а документы). SQL - реляционная БД, потому, что она основана на связях, а МонгоДБ - документоориентированная, потому, что она содержит в себе документы. Мангус строится на промисах, они подключены из коробки. Запрос - это не промис. Mongoose queries are not promises. They have a .then() function for co and async/await as a convenience. If you need a fully-fledged promise, use the .exec() function. Лучше так не делать, но...так можно :)</p>
+<pre class="p-2">var query = Band.findOne({name: "Guns N' Roses"});
+assert.ok(!(query instanceof Promise));
+
+// A query is not a fully-fledged promise, but it does have a `.then()`.
+query.then(function (doc) {
+	// use doc
+});
+
+// `.exec()` gives you a fully-fledged promise
+var promise = query.exec();
+assert.ok(promise instanceof Promise);
+
+promise.then(function (doc) {
+	// use doc
+});
+</pre>
+<pre class="p-2">var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	// we're connected!
+});
+</pre>
+				<hr class="m-5">
+				<p>Создаем папку models и уже в ней модели. Модели обычно пишут с большой буквы, проводя аналогию с классами. А файлы лцчше называть с маленькой буквы.</p>
+<pre class="p-2">const Schema = require('mongoose').Schema;
+
+const blogSchema = new Schema({
+	title:  String,
+	author: String,
+	body:   String,
+	comments: [{ body: String, date: Date }],
+	date: { type: Date, default: Date.now },
+	hidden: Boolean,
+	meta: {
+		votes: Number,
+		favs:  Number
+	}
+});
+</pre>
+				<p>Возможные типы данных:</p>
+				<ul>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#strings">String</a></li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#numbers">Number</a></li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#dates">Date</a></li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#buffers">Buffer</a></li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#booleans">Boolean</a></li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#mixed">Mixed</a> - если абсолютно разнообразные типы могут быть.</li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#objectids">ObjectId</a> - айди "документа". С его помощью реализуются ссылки. Например, если есть книга и у нее несколько авторов, у которых есть свои документы в БД.</li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#arrays">Array</a></li>
+						<li><a href="https://mongoosejs.com/docs/api.html#mongoose_Mongoose-Decimal128">Decimal128</a></li>
+						<li><a href="https://mongoosejs.com/docs/schematypes.html#maps">Map</a></li>
+				</ul>
+				<p>Можно задать более детальное описание поля модели, в том числе и значение по-умолчанию.</p>
+<pre class="p-2">const Schema = require('mongoose').Schema;
+
+const categorySchema = new Schema({
+	name: String,
+	createdAt: {
+		type: String,
+		required: true,
+		default: Date.now // здесь можно передать функцию, которая будет возвращать значение
+	},
+	authors: Array, // or [], or [String] - array of strings
+	meta: { // объект со вложенными значениями
+		votes: Number,
+		favs:  Number
+	}
+});
+
+module.exports = mongoose.model('Category', categorySchema);
+</pre>
+				<p>При первом обращении (если не существует) в БД создастся коллекция со множественным названием (here - categories)</p>
+				<p>Еще один пример (<a href="https://mongoosejs.com/docs/schematypes.html">https://mongoosejs.com/docs/schematypes.html</a>):</p>
+<pre class="p-2">const schema = new Schema({
+	name:    String,
+	binary:  Buffer,
+	living:  Boolean,
+	updated: { type: Date, default: Date.now },
+	age:     { type: Number, min: 18, max: 65 },
+	mixed:   Schema.Types.Mixed,
+	_someId: Schema.Types.ObjectId,
+	decimal: Schema.Types.Decimal128, // внезапные типы данных беруться так!
+	array: [],
+	ofString: [String],
+	ofNumber: [Number],
+	ofDates: [Date],
+	ofBuffer: [Buffer],
+	ofBoolean: [Boolean],
+	ofMixed: [Schema.Types.Mixed],
+	ofObjectId: [Schema.Types.ObjectId],
+	ofArrays: [[]],
+	ofArrayOfNumbers: [[Number]],
+	nested: {
+		stuff: { type: String, lowercase: true, trim: true }
+	},
+	map: Map,
+	mapOfString: {
+		type: Map,
+		of: String
+	}
+})
+</pre>
+				<hr class="m-5">
+				<h4>Классическая структура Node приложения:</h4>
+<pre class="p-2 mt-4">root/
+  |-- models/
+  |-- controllers/   - отсель взывают к сервисам
+  |-- services/      - здесь описывают манипуляции, обращения к БД или любые другие функции, которые можно вынести в сущности
+  db.js
+  index.js
+  routes.js
+</pre>
+				<p>Для каждого роутса (из файла routes.js) создается файл с тем же названием в папке контроллеров (здесь - categories.js).</p>
+				<p>Обычно стремятся к тому, чтобы контроллер был "тонким", т.е. вся логика длжна быть в сервисах.</p>
+				<p>Основные приложения для просмотра БД - mongo compass &amp; <a href="https://robomongo.org/">robo 3t</a>.</p>
+				<hr class="m-5">
+				<h3>Простейший сервер</h3>
+				<p>Структура файлов:</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/server-folders.png" alt="структура"></p>
+				<hr class="m-5">
+				<ul>
+					<li><b>models</b> - содержит модели для доступа к бд</li>
+					<li><b>routers</b> - urls и ссылки которые их обрабатывают. Обработчики урлов лежат в controllers</li>
+					<li><b>controllers</b> - содержит в себе вызов нужных сервисов. Логики в этой части нет, только подготовка нужных аргументов для сервиса и ответ клиенту</li>
+					<li><b>services</b> - в них содержиться вся логика. Для каждой отдельной операции к БД желательно иметь отдельную функцию (например getAllProducts, updateProduct), так же тут содержится логика приложения</li>
+				</ul>
+				<hr class="m-5">
+				<p><i>controllers/categories.js</i></p>
+<pre class="p-2">const categoriesServices = require('../services/categories')
+
+async function getAll (req, res) {
+	const categories = await categoriesServices.getAll();
+	res.json( categories )
+}
+
+async function createCategory (req, res) {
+	console.log('req.body', req.body)
+	const category = await categoriesServices.create(req.body);
+	res.json( category )
+}
+
+module.exports = {
+	getAll, createCategory
+}
+</pre>
+				<p><i>models/category.js</i></p>
+<pre class="p-2">const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
+
+const categorySchema = new Schema({
+	name: {
+		type: String,
+		default: 'Way-way'
+	},
+	createdAt: {
+		type: String,
+		required: true,
+		default: Date.now
+	}
+});
+
+module.exports = mongoose.model('Category', categorySchema);
+</pre>
+				<p><i>services/categories.js</i></p>
+<pre class="p-2">const Category = require('../models/category')
+
+async function getAll() {
+	const categories = await Category.find()
+	return categories
+}
+
+async function create(category) {
+	const data = await Category.create(category)
+	return data
+}
+
+module.exports = { getAll, create }
+</pre>					
+				<p><i>db.js</i></p>
+<pre class="p-2">const mongoose = require('mongoose');
+
+mongoose.set('debug', true)
+mongoose.connect('mongodb://localhost/reactNode', { useNewUrlParser: true });
+
+module.exports = mongoose
+</pre>
+				<p><i>routes.js</i></p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+const { getAll: getAllCategories, createCategory } = require('./controllers/categories')
+
+router.get('/category', getAllCategories)
+router.post('/category', createCategory)
+
+module.exports = router
+</pre>
+				<p><i>index.js</i></p>
+<pre class="p-2">const express = require('express')
+const app = express()
+const port = 3000
+
+const helmet = require('helmet')
+const bodyParser = require('body-parser')
+const routes = require('./routes')
+const db = require('./db')
+
+app.use(bodyParser.urlencoded({
+	extended: true
+}))
+app.use(bodyParser.json())
+
+app.use(helmet())
+app.use(routes)
+
+app.use((err, req, res, next) =&gt; {
+	if  (!err.code) {
+		res.status(500)
+	} else {
+		res.status(err.code)
+	}
+	res.json({error: 'Not found'})
+})
+
+db.connection.once('open', function() {
+	app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+})
+</pre>
+				<p>Результат пост-запроса:</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/server-results.png" alt="результат"></p>
+				<hr class="m-5">
+				<p>Если в проекте много роутов для разных категорий/объектов, их выносят в отдельный файл. Отдельный роут для каждой сущности.</p>
+				<hr class="m-5">
+				<p>Во избежание ошибок, не забываем про try/catch. Здесь можно передавать не перехваченную ошибку, а какое-нибудь свое пояснение ситуации, типа, "такой-то сервер устал и прилег отдохнуть".</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/try-catch.png" alt="try-catch"></p>
+				<hr class="m-5">
+				<h3>Фильтрация/поиск (нативная) <a href="https://mongoosejs.com/docs/api/model.html#model_Model.find">https://mongoosejs.com/docs/api/model.html#model_Model.find</a></h3>
+<pre class="p-2 mt-4">db.getCollection('products').find({name: "Tratata"})
+</pre>
+				<p>Есть куча разных вариантов поиска, часто используется .findById()</p>
+				<hr class="m-5">
+				<h3>Удаление (<a href="https://mongoosejs.com/docs/api/model.html#model_Model.remove">https://mongoosejs.com/docs/api/model.html#model_Model.remove</a>)</h3>
+<pre class="p-2 mt-4">const res = await Character.remove({ name: 'Eddard Stark' });
+res.deletedCount; // Number of documents removed
+</pre>
+				<hr class="m-5">
+				<h3>Изменение (<a href="https://mongoosejs.com/docs/api/model.html#model_Model.update">https://mongoosejs.com/docs/api/model.html#model_Model.update</a>)</h3>
+<pre class="p-2 mt-4">MyModel.update({ age: { $gt: 18 } }, { oldEnough: true }, fn);
+
+const res = await MyModel.update({ name: 'Tobi' }, { ferret: true });
+res.n; // Number of documents that matched `{ name: 'Tobi' }`
+// Number of documents that were changed. If every doc matched already
+// had `ferret` set to `true`, `nModified` will be 0.
+res.nModified;
+</pre>
+				<p>Пример update продукта по id.</p>
+				<p><i>controller/products.js</i></p>
+<pre class="p-2">const productsServices = require('../services/products')
+
+async function getAll (req, res) {
+	const products = await productsServices.getAll();
+	res.json( products )
+}
+
+async function create (req, res, next) {
+	try {
+		const product = await productsServices.create(req.body);
+		res.json( product )
+	} catch (err) {
+		next(err)
+	}
+}
+
+async function update (req, res, next) {
+	try {
+		const product = await productsServices.update(req.body);
+		res.json( product )
+	} catch (err) {
+		next(err)
+	}
+}
+
+module.exports = {
+	getAll, create, update
+}
+</pre>
+				<p><i>services/products.js</i></p>
+<pre class="p-2">const Product = require('../models/product')
+
+const getAll = () =&gt; Product.find()
+const create = (product) =&gt; Product.create(product)
+// update by id
+const update = ({_id, ...rest}) =&gt; Product.update({_id}, rest)
+
+module.exports = { getAll, create, update }
+</pre>
+				<p><i>routes.js</i></p>
+<pre class="p-2">const express = require('express')
+const router = express.Router()
+const { 
+	getAll: getAllCategories, 
+	createCategory } = require('./controllers/categories')
+
+const { 
+	getAll: getAllProducts, 
+	create: createProduct,
+	update: updateProduct } = require('./controllers/products')
+
+router.get('/category', getAllCategories)
+router.post('/category', createCategory)
+
+router.get('/product', getAllProducts)
+router.post('/product', createProduct)
+
+// неверная реализаций, нужно здесь передавать id
+// router.put('/product/:id', updateProduct)
+// в домашке делать нормально
+router.put('/product', updateProduct)
+
+module.exports = router
+</pre>
+				<hr class="m-5">
+				<h4>Особенности mongoose</h4>
+				<p>Кривая документация...если что-то надо  - гугли!</p>
+				<p>Мангус позволяет делать "ссылки" (service/products.js), это всего один дополнительный запрос:</p>
+<pre class="p-2">const Product = require('../models/product')
+
+// populate is a "link", если нам надо несколько ссылок, то передается массив .populate(['category'])
+const getAll = () =&gt; Product.find().populate("category")
+const create = (product) =&gt; Product.create(product)
+// update by id
+const update = ({_id, ...rest}) =&gt; Product.update({_id}, rest)
+
+module.exports = { getAll, create, update }
+</pre>
+				<p><i>Модель продукта</i></p>
+<pre class="p-2">const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
+
+const productSchema = new Schema({
+	name: {
+		type: String,
+		required: true,
+		default: 'Project without name'
+	},
+	cost: {
+		type: Number,
+		default: 0
+	},
+	description: {
+		type: String
+	},
+	category: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Category' // название модели
+	}
+});
+
+module.exports = mongoose.model('Product', productSchema);
+</pre>
+				<hr class="m-5">
+				<p>Mongoose update or cteate - <a href="https://stackoverflow.com/questions/13337685/mongoose-js-how-to-implement-create-or-update">upsert: true</a></p>
+<pre class="p-2">// The caveat is that your model's defaults and middleware (if any) will not be applied.
+var obj = req.body;
+var id = obj._id;
+delete obj._id;
+if (id) {
+	Model.update({_id: id}, obj, {upsert: true}, function (err) {...});
+}
+
+// or Mongoose 4.x Update
+// You can now use the setDefaultOnInsert option to also apply defaults if the upsert creates a new document.
+
+Model.update({_id: id}, obj, {upsert: true, setDefaultsOnInsert: true}, cb);
+</pre>
+				<hr class="m-5">
+				<h2>Всяко-разно:</h2>
+				<p><i><a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a></i> - "Create, read, update and delete" - сокращённое именование 4 базовых функций при работе с персистентными хранилищами данных — создание, чтение, редактирование и удаление.</p>
+				<ul>
+					<li><b>C</b>reate - PUT / POST</li>
+					<li><b>R</b>ead (Retrieve) - GET</li>
+					<li><b>U</b>pdate (Modify) - PUT / POST / PATCH</li>
+					<li><b>D</b>elete (Destroy) - DELETE</li>
+				</ul>
+				<hr class="m-5">
+				<p>Для SQL mongoose не используется, для него есть библиотека <a href="http://docs.sequelizejs.com/">Sequelize</a>.</p>
+				<hr class="m-5">
+				<p><a href="https://habr.com/ru/post/181772/">MVC для веб: проще некуда</a></p>
+				<hr class="m-5">
+				<p><a href="https://ru.wikipedia.org/wiki/ORM">ORM</a> - (англ. Object-Relational Mapping, рус. объектно-реляционное отображение, или преобразование) — технология программирования, которая связывает базы данных с концепциями объектно-ориентированных языков программирования, создавая «виртуальную объектную базу данных». Существуют как проприетарные, так и свободные реализации этой технологии. Mongoose - это и есть ORM для МонгоДБ.</p>
+				<hr class="m-5">
+				<p><a href="https://learn.javascript.ru/exception">try...catch</a> - перехват ошибок.</p>
+				<hr class="m-5">
+				<p><a href="http://www.passportjs.org/">Passport js</a> - authentication middleware for Node.js.</p>
+				<hr class="m-5">
+				<p><a href="https://tproger.ru/translations/rendering-on-the-web/">Серверный или клиентский рендеринг на вебе: что лучше использовать у себя в проекте и почему</a></p>
+				<hr class="m-5">
+				<p><a href="https://firebase.google.com/">firebase</a> - БД от гугла.</p>
+				<hr class="m-5">
+				<p>Для работы с БД mongodb используется <a href="https://mongoosejs.com/docs/guide.html">https://mongoosejs.com/docs/guide.html</a></p>
+				<hr class="m-5">
+				<p>Для удобного чтения БД <a href="https://robomongo.org/">https://robomongo.org/</a></p>
+				<hr class="m-5">
+			</div>
+			<div class="col-12 pt-2 pb-2">
+					<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson5" role="button" aria-expanded="true" aria-controls="lesson5">Lesson #5: React Router, PropTypes, Material UI</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse" id="lesson5">
+				<h2>Git</h2>
+				<p>Необходимые команды:</p>
+				<ul>
+					<li>"git clone"</li>
+					<li>"git commit" - ключ "-m" добавляем сообщение. Коммит фиксирет ваши изменения на данный момент. После каждой логической задачи рекомендуется делать коммит, дабы не растерять волшебных заготовок и полета мысли, и иметь возможность откатиться до какого-то момпента.</li>
+					<li>"git add ." - точка здесь значит "всё", чтобы файлы начали отслеживаться</li>
+					<li>"git push" - заливка на сервер всех коммитов</li>
+					<li>"git pull" - скачивание чужих коммитов</li>
+					<li>"git revert" - лучше не делать этого руками. Используй утилиты....например, веб-шторм.</li>
+					<li>"git reset" - "undo commit"</li>
+					<li>"git stash" - "прятанье". Часто возникает такая ситуация, что пока вы работаете над частью своего проекта, всё находится в беспорядочном состоянии, а вам нужно переключить ветки, чтобы немного поработать над чем-то другим. Проблема в том, что вы не хотите делать коммит с наполовину доделанной работой только для того, чтобы позже можно было вернуться в это же состояние.</li>
+					<li>"git merge"</li>
+				</ul>
+				<hr class="m-5">
+				<p>Полезные ссылки:</p>
+				<ul>
+					<li><a href="https://habr.com/ru/post/174467/">Ежедневная работа с Git</a></li>
+					<li>Плагин для VSCode для работы с git - gitLens (<a href="https://gitlens.amod.io/">https://gitlens.amod.io/</a>).</li>
+				</ul>
+				<hr class="m-5">
+				<h2>React Router</h2>
+				<p>Это библиотека, которая предоставляет возможность для создания марштутизации для реакт приложения. Есть другие библиотеки, но эта самая популярная на данный момент. В <a href="https://reacttraining.com/react-router/web/guides/quick-start">документации</a> необходимо переключиться на вкладку web.</p>
+				<p>Перед тем, как начать работать с роутером, его надо установить:</p>
+<pre class="p-2">npm install react-router-dom
+</pre>
+				<p>Старые версии приложений могут работать с react-router. Большое отличие 3й версии от 4й, текущая версия - 5я. Надо иметь в виду при работе со старыми проектами.</p>
+				<hr class="m-5">
+				<p>Первое, что  необходимо сделать - обернуть все приложение в &lt;Router&gt; и интегрировать его в приложение.</p>
+<pre class="p-2">import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+</pre>
+<pre class="p-2">import createBrowserHistory from 'history/createBrowserHistory'
+
+const history = createBrowserHistory();
+
+&lt;Router history={history}&gt;
+	&lt;Switch&gt;
+		&lt;Route path="/" exact component={Home} /&gt;
+		&lt;Route path="/about" exact component={About} /&gt;
+	&lt;/Switch&gt;
+&lt;/Router&gt;
+</pre>
+				<hr class="m-5">
+				<h3>&lt;Router&gt; бывает нескольких типов:</h3>
+				<p><b>&lt;HashRouter&gt;</b> - A Router that uses the hash portion of the URL (i.e. window.location.hash) to keep your UI in sync with the URL. Можно увидеть в старых приложениях, особенно в ангуляре, большинство приложений было реализовано именно таким образом.</p>
+<pre class="p-2">import { HashRouter } from 'react-router-dom'
+
+&lt;HashRouter&gt;
+	&lt;App/&gt;
+&lt;/HashRouter&gt;
+
+&lt;HashRouter basename="/calendar"/&gt;
+&lt;Link to="/today"/&gt; // renders &lt;a href="#/calendar/today"&gt;
+</pre>
+				<p><b>&lt;MemoryRouter&gt;</b> - A Router that keeps the history of your “URL” in memory (does not read or write to the address bar). Useful in tests and non-browser environments like React Native.</p>
+				<p><b>&lt;StaticRouter&gt;</b> - This can be useful in server-side rendering scenarios when the user isn’t actually clicking around, so the location never actually changes. Hence, the name: static. It’s also useful in simple tests when you just need to plug in a location and make assertions on the render output.</p>
+				<p><b>&lt;BrowserRouter&gt;</b> - A Router that uses the HTML5 history API (pushState, replaceState and the popstate event) to keep your UI in sync with the URL. Обычный роутер, мы будем работать именно с ним.</p>
+				<p>BrowserRouter принимает одного ребенка!</p>
+<pre class="p-2">...
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+...
+
+&lt;Router&gt;
+	&lt;div id="wrapper" className="container"&gt;
+		...
+	&lt;/div&gt;
+&lt;/Router&gt;
+</pre>
+				<p>Далее создаются роуты - "ссылки" для перехода. В следующем примере при переходе на дефолтный урл будет отображаться компонент Home и т.д.</p>
+<pre class="p-2">...
+&lt;Router&gt;
+	&lt;div id="wrapper" className="container"&gt;
+		&lt;Route exact path="/" component={Home} /&gt;
+		&lt;Route exact path="/about" component={About} /&gt;
+		&lt;Route exact path="/article" component={Article} /&gt;
+	&lt;/div&gt;
+&lt;/Router&gt;
+</pre>
+				<hr class="m-5">
+				<p>Свойство <b>exact</b> говорит о том, что адрес перехода должен быть именно такой и никакой иначе. Если его убрать, то роут будет отрабатывать, если (к примеру) не просто "/about", а так же что-либо аналогичное "/about/tratatulichki/somethingterrible". Будет отрисовывать компонент для всех чилдренов, входящих в изначальтный урл.</p>
+				<hr class="m-5">
+				<p>На один <b>path</b> можно назначить сколько угодно <b>роутов</b>.</p>
+				<hr class="m-5">
+				<p>Помимо <b>component</b> можно передавать свойство <b>render</b>, оно принимает непосредственно какой-то компонент, не класс компонента, а конкретный код (JSX). Принимает функцию, в которую можно передать пропсы:</p>
+<pre class="p-2">...
+&lt;Router&gt;
+	&lt;div id="wrapper" className="container"&gt;
+		&lt;Route exact path="/" render={() =&gt; (&lt;div&gt;This's a rendered code&lt;/div&gt;)} /&gt;
+	&lt;/div&gt;
+&lt;/Router&gt;
+</pre>
+<pre class="p-2">// You can spread routeProps to make them available to your rendered Component
+const FadingRoute = ({ component: Component, ...rest }) =&gt; (
+	&lt;Route {...rest} render={routeProps =&gt; (
+	&lt;FadeIn&gt;
+		&lt;Component {...routeProps}/&gt;
+	&lt;/FadeIn&gt;
+	)}/&gt;
+)
+
+&lt;FadingRoute path="/cool" component={Something}/&gt;
+</pre>
+				<p>Лучше разбивать все по компонентам и передавать соответственно, т.е. не использовать render.</p>
+				<hr class="m-5">
+				<p>Передача <b>props</b> роутеру. Если передать id таким образом:</p>
+<pre class="p-2">&lt;Router&gt;
+	&lt;div id="wrapper" className="container"&gt;
+		&lt;Route exact path="/article/:id" component={Article} /&gt;
+	&lt;/div&gt;
+&lt;/Router&gt;
+</pre>
+				<p>то он будет доступен в компоненте в объекте <b>props.match.params</b>.</p>
+<pre class="p-2">import React from 'react';
+
+export default function Article(props) {
+	return &lt;div className="content"&gt;
+		&lt;h2&gt;Article page: {props.match.params.id}&lt;/h2&gt;
+	&lt;/div&gt;
+}
+</pre>				
+				<hr class="m-5">
+				<p>Также в <b>props</b> у нас доступно несколько новых значений:</p>
+				<p><img class="d-block mx-auto" src="file:///Users/kate/Documents/_react/compendium/images/props.png" alt="router props"></p>
+				<p><b>history</b> - объект, с помощью которого можно работать с браузерной историей, можем использовать для перемещения по истории назад/вреред и прочее. <b>length</b> - количество наших переходов. <b>push</b> - перейти куда-то. <b>replace</b> - заменить текущий адрес на что-то (например, если после загрузки каких-то данных в componentDidMount мы хотим перекинуть пользователя на другой роут... или после логина перекинуть пользователя на дашборд). <b>location</b> - текущее положение.</p>
+				<hr class="m-5">
+				<h3>&lt;Link&gt;</h3>
+				<p>Для организации ссылок обычная линка не подойдет, используется компонент Link.</p>
+<pre class="p-2">...
+&lt;Router&gt;
+	&lt;div id="wrapper" className="container"&gt;
+		&lt;ul&gt;
+			&lt;li&gt;&lt;Link to={"/about"}&gt;About&lt;/Link&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;Link to={"/article"}&gt;Article&lt;/Link&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;Link to={"/article/test-article"}&gt;Test Article&lt;/Link&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+		&lt;Route exact path="/" component={Home} /&gt;
+		&lt;Route exact path="/" render={() =&gt; (&lt;div&gt;This's a rendered code.&lt;/div&gt;)} /&gt;
+		&lt;Route exact path="/about" component={About} /&gt;
+		&lt;Route exact path="/article" component={Article} /&gt;
+		&lt;Route exact path="/article/:id" component={Article} /&gt;
+	&lt;/div&gt;
+&lt;/Router&gt;
+</pre>
+				<p>В итоге Link в браузере отображается, как обычная ссылка, но, если в реакт-приложении использовать ссылку, вместо Link, то при переходе по простой ссылке страница перегружается.</p>
+				<p><b>to</b> можно передать как:</p>
+				<ul>
+					<li>string - A string representation of the location to link to, created by concatenating the location’s pathname, search, and hash properties.</li>
+					<li>object: 
+						<ul>
+							<li>pathname: A string representing the path to link to.</li>
+							<li>search: A string representation of query parameters.</li>
+							<li>hash: A hash to put in the URL, e.g. #a-hash.</li>
+							<li>state: State to persist to the location.</li>
+						</ul> 
+					</li>
+					<li>function - A function to which current location is passed as an argument and which should return location representation as a string or as an object</li>
+				</ul>
+				<p><b>replace</b> - заменять текущий урл (When true, clicking the link will replace the current entry in the history stack instead of adding a new one).</p>
+				<hr class="m-5">
+				<h3>&lt;NavLink&gt;</h3>
+				<p>Аналогичен линку, но имеет возможность длбавлять свойство активности.</p>
+<pre class="p-2">...
+import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
+...
+&lt;Router&gt;
+	&lt;div id="wrapper" className="container"&gt;
+		&lt;ul&gt;
+			&lt;li&gt;&lt;NavLink to={"/about"}&gt;About&lt;/NavLink&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;NavLink to={"/article"}&gt;Article&lt;/NavLink&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+		&lt;Route exact path="/" component={Home} /&gt;
+		&lt;Route exact path="/about" component={About} /&gt;
+		&lt;Route exact path="/article" component={Article} /&gt;
+	&lt;/div&gt;
+&lt;/Router&gt;
+</pre>
+				<p><b>activeClassName</b> - здесь можно изменить имя активного класса, если просто актив нам не нравится.</p>
+				<p><b>exact</b> - when true, the active class/style will only be applied if the location is matched exactly.</p>
+				<hr class="m-5">
+				<h3>WithRouter</h3>
+				<p>По умолчанию пропсы роутера не передаются дочерним компонентам роут-компонента. Можно передать дочернему компоненты данные, как параметры, но это слишком долго, поэтому есть следующее решение - из реакт-роутер-дома взять следующий компонент <b>withRouter</b>. Работает как HOC.</p>
+				<p>Родительский компонент <i>Product.js</i></p>
+<pre class="p-2">import React, { Component } from 'react';
+import About from './About';
+
+class Product extends Component {
+	render() {
+		console.log('product', this.props)
+		return &lt;div&gt;
+			here is a product: {this.props.match.params.id}
+			&lt;About /&gt;
+		&lt;/div&gt;
+	}
+}
+
+
+export default Product
+</pre>
+				<p>Дочерний компонент <i>About.js</i></p>
+<pre class="p-2">import React from 'react';
+import { withRouter } from 'react-router-dom';
+
+function About(props) {
+	console.log('about', props)
+	return &lt;div className="content"&gt;
+		&lt;h2&gt;About page&lt;/h2&gt;
+	&lt;/div&gt;
+}
+
+export default withRouter(About)
+</pre>
+				<p>После подобных манипуляций пропсы роутера становятся доступныы дочернему компоненту. Такое нужно не часто.</p>
+				<hr class="m-5">
+				<h3>Redirect</h3>
+				<p><i>App.js</i></p>
+<pre class="p-2">import React, {Component} from 'react';
+import { BrowserRouter as Router, Route, Link, NavLink, Redirect } from "react-router-dom";
+
+import Article from './components/Article';
+
+class App extends Component {
+	
+	render() {
+		return (
+			&lt;Router&gt;
+				&lt;div id="wrapper" className="container"&gt;
+					&lt;Route exact path="/article/:id" component={Article} /&gt;
+					&lt;Route exact path="/redirect" render={()=&gt; &lt;Redirect to={"/article/tratata"} /&gt;} /&gt;
+				&lt;/div&gt;
+			&lt;/Router&gt;
+		);
+	}
+}
+
+export default App;
+</pre>
+				<p>Работу с объектом хистори (push, например) мы должны использовать при работе внутри компонента, не в jsx; редирект - перенаправляет именно с помощью jsx.</p>
+				<hr class="m-5">
+				<h3>&lt;Switch&gt;</h3>
+				<p>Часто бывает, что на одном и том же урле показыываюся разные роуты, часто нам это не нужно, нужно, чтобы на одной странице показывался только один роут. Это делается с помощью конструкции Switch. Без свича будет проверяться каждый роут на соотвествие запросу, при наличии свича - найдется и выведется только первый, который подойдет, остальные проигнорируются.</p>
+<pre class="p-2">&lt;Router&gt;
+	&lt;div id="wrapper" className="container"&gt;
+		&lt;ul&gt;
+			&lt;li&gt;&lt;NavLink exact to={"/about"}&gt;About&lt;/NavLink&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;NavLink exact to={"/article"}&gt;Article&lt;/NavLink&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;NavLink to={"/product/111222"}&gt;Product&lt;/NavLink&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;Link to={"/article/test-article"}&gt;Test Article&lt;/Link&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+		&lt;Switch&gt;
+			&lt;Route exact path="/" component={Home} /&gt;
+			&lt;Route exact path="/" render={() =&gt; (&lt;div&gt;This's a rendered code.&lt;/div&gt;)} /&gt;
+			&lt;Route exact path="/about" component={About} /&gt;
+			&lt;Route exact path="/product" component={Product} /&gt;
+			&lt;Route exact path="/article" component={Article} /&gt;
+			&lt;Route exact path="/product/:id" component={Product} /&gt;
+			&lt;Route exact path="/article/:id" component={Article} /&gt;
+			&lt;Route exact path="/redirect" render={()=&gt; &lt;Redirect to={"/article/tratata"} /&gt;} /&gt;
+		&lt;/Switch&gt;
+	&lt;/div&gt;
+&lt;/Router&gt;
+</pre>
+				<p><b>404</b> - в свиче последним пишется роут без path.</p>
+<pre class="p-2">		&lt;Router&gt;
+		&lt;div id="wrapper" className="container"&gt;
+			&lt;Switch&gt;
+				&lt;Route exact path="/" component={Home} /&gt;
+				...
+				&lt;Route render={() =&gt; (&lt;div&gt;Way way: 404&lt;/div&gt;)} /&gt;
+			&lt;/Switch&gt;
+		&lt;/div&gt;
+	&lt;/Router&gt;
+</pre>
+				<hr class="m-5">
+				<h3><a href="https://reacttraining.com/react-router/web/example/sidebar">Sidebar</a></h3>
+				<p>Each logical "route" has two components, one for  the sidebar and one for the main area. We want to render both of them in different places when the path matches the current URL.</p>
+<pre class="p-2">import React from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+const routes = [
+	{
+		path: "/",
+		exact: true,
+		sidebar: () =&gt; &lt;div&gt;home!&lt;/div&gt;,
+		main: () =&gt; &lt;h2&gt;Home&lt;/h2&gt;
+	}, {
+		path: "/bubblegum",
+		sidebar: () =&gt; &lt;div&gt;bubblegum!&lt;/div&gt;,
+		main: () =&gt; &lt;h2&gt;Bubblegum&lt;/h2&gt;
+	}, {
+		path: "/shoelaces",
+		sidebar: () =&gt; &lt;div&gt;shoelaces!&lt;/div&gt;,
+		main: () =&gt; &lt;h2&gt;Shoelaces&lt;/h2&gt;
+	}
+];
+
+function SidebarExample() {
+	return (
+		&lt;Router&gt;
+			&lt;div style={{ display: "flex" }}&gt;
+				&lt;div style={{ padding: "10px", width: "40%", background: "#f0f0f0" }} &gt;
+					&lt;ul style={{ listStyleType: "none", padding: 0 }}&gt;
+						&lt;li&gt;&lt;Link to="/"&gt;Home&lt;/Link&gt; &lt;/li&gt;
+						&lt;li&gt;&lt;Link to="/bubblegum"&gt;Bubblegum&lt;/Link&gt;&lt;/li&gt;
+						&lt;li&gt;&lt;Link to="/shoelaces"&gt;Shoelaces&lt;/Link&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+
+					{routes.map((route, index) =&gt; (
+// You can render a &lt;Route&gt; in as many places as you want in your app. It will render along
+// with any other &lt;Route&gt;s that also match the URL. So, a sidebar or breadcrumbs or anything else
+// that requires you to render multiple things in multiple places at the same URL is nothing more than multiple &lt;Route&gt;s.
+						&lt;Route key={index} path={route.path} exact={route.exact} component={route.sidebar} /&gt;
+					))}
+				&lt;/div&gt;
+
+				&lt;div style={{ flex: 1, padding: "10px" }}&gt;
+					{routes.map((route, index) =&gt; (
+// Render more &lt;Route&gt;s with the same paths as above, but different components this time.
+						&lt;Route key={index} path={route.path} exact={route.exact} component={route.main} /&gt;
+					))}
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/Router&gt;
+	);
+}
+
+export default SidebarExample;
+</pre>
+				<hr class="m-5">
+				<h3>Правило хорошего тона</h3>
+				<p>В следующем примере роуты определяются динамически, а в массиве явно видно какой роут соотвествует какому компоненту, делать роуты так! Помимо этого можно сделать объект urls, в котором содержится список-соответствие всех урлов приложения. Если придется менять урлы, то в итоге это надо будет делать в одном месте, а не проходить по всему документу в поиске необходимого для замены (для линков).</p>
+<pre class="p-2">...
+
+const urls = {
+	root: '/',
+	products: '/products',
+	about: '/about'
+};
+
+const routes = [
+	{
+		path: urls.root,
+		exact: true,
+		component: Home,
+		isProtected: true // можно писать все, что угодно, ьтолько потом добавить обработчики
+	},{
+		path: urls.about,
+		exact: true,
+		component: About
+	},{
+		path: urls.products,
+		exact: true,
+		component: Product
+	}
+];
+...
+&lt;Switch&gt;
+	{routes.map((props) =&gt; &lt;Route {...{...props}} /&gt;)}
+&lt;/Switch&gt;
+</pre>
+				<hr class="m-5">
+				<h3><a href="https://reacttraining.com/react-router/web/example/auth-workflow">Пример с фейковой авторизацией</a></h3>
+<pre class="p-2">import React, { Component } from "react";
+import {
+	BrowserRouter as Router,
+	Route,
+	Link,
+	Redirect,
+	withRouter
+} from "react-router-dom";
+
+////////////////////////////////////////////////////////////
+// 1. Click the public page
+// 2. Click the protected page
+// 3. Log in
+// 4. Click the back button, note the URL each time
+
+function AuthExample() {
+	return (
+	&lt;Router&gt;
+		&lt;div&gt;
+		&lt;AuthButton /&gt;
+		&lt;ul&gt;
+			&lt;li&gt;&lt;Link to="/public"&gt;Public Page&lt;/Link&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;Link to="/protected"&gt;Protected Page&lt;/Link&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+		&lt;Route path="/public" component={Public} /&gt;
+		&lt;Route path="/login" component={Login} /&gt;
+		&lt;PrivateRoute path="/protected" component={Protected} /&gt;
+		&lt;/div&gt;
+	&lt;/Router&gt;
+	);
+}
+
+const fakeAuth = {
+	isAuthenticated: false,
+	authenticate(cb) {
+		this.isAuthenticated = true;
+		setTimeout(cb, 100); // fake async
+	},
+	signout(cb) {
+		this.isAuthenticated = false;
+		setTimeout(cb, 100);
+	}
+};
+
+const AuthButton = withRouter(
+	({ history }) =&gt;
+	fakeAuth.isAuthenticated ? (
+		&lt;p&gt; Welcome!{" "} &lt;button onClick={() =&gt; {
+				fakeAuth.signout(() =&gt; history.push("/"));
+			}}
+		&gt;Sign out&lt;/button&gt;&lt;/p&gt;
+	) : (
+		&lt;p&gt;You are not logged in.&lt;/p&gt;
+	)
+);
+
+function PrivateRoute({ component: Component, ...rest }) {
+	return (
+	&lt;Route
+		{...rest}
+		render={props =&gt;
+		fakeAuth.isAuthenticated ? (
+			&lt;Component {...props} /&gt;
+		) : (
+			&lt;Redirect to={{
+				pathname: "/login",
+				state: { from: props.location }
+			}} /&gt;
+		)
+		}
+	/&gt;
+	);
+}
+
+function Public() {
+	return &lt;h3&gt;Public&lt;/h3&gt;;
+}
+
+function Protected() {
+	return &lt;h3&gt;Protected&lt;/h3&gt;;
+}
+
+class Login extends Component {
+	state = { redirectToReferrer: false };
+
+	login = () =&gt; {
+	fakeAuth.authenticate(() =&gt; {
+		this.setState({ redirectToReferrer: true });
+	});
+	};
+
+	render() {
+	let { from } = this.props.location.state || { from: { pathname: "/" } };
+	let { redirectToReferrer } = this.state;
+
+	if (redirectToReferrer) return &lt;Redirect to={from} /&gt;;
+
+	return (
+		&lt;div&gt;
+		&lt;p&gt;You must log in to view the page at {from.pathname}&lt;/p&gt;
+		&lt;button onClick={this.login}&gt;Log in&lt;/button&gt;
+		&lt;/div&gt;
+	);
+	}
+}
+
+export default AuthExample;
+</pre>
+				<hr class="m-5">
+				<h3><a href="https://reacttraining.com/react-router/web/example/preventing-transitions">Пример с запретом перехода</a></h3>
+				<p>Для этого используется компонент <b>Prompt</b></p>
+<pre class="p-2">import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link, Prompt } from "react-router-dom";
+
+function PreventingTransitionsExample() {
+	return (
+	&lt;Router&gt;
+		&lt;div&gt;
+			&lt;ul&gt;
+				&lt;li&gt;&lt;Link to="/"&gt;Form&lt;/Link&gt;&lt;/li&gt;
+				&lt;li&gt;&lt;Link to="/one"&gt;One&lt;/Link&gt;&lt;/li&gt;
+				&lt;li&gt;&lt;Link to="/two"&gt;Two&lt;/Link&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+			&lt;Route path="/" exact component={Form} /&gt;
+			&lt;Route path="/one" render={() =&gt; &lt;h3&gt;One&lt;/h3&gt;} /&gt;
+			&lt;Route path="/two" render={() =&gt; &lt;h3&gt;Two&lt;/h3&gt;} /&gt;
+		&lt;/div&gt;
+	&lt;/Router&gt;
+	);
+}
+
+class Form extends Component {
+	state = { isBlocking: false };
+
+	render() {
+		let { isBlocking } = this.state;
+
+		return (
+				&lt;form onSubmit={event =&gt; {
+						event.preventDefault();
+						event.target.reset();
+						this.setState({
+						isBlocking: false
+						});
+					}}
+				&gt;
+					&lt;Prompt
+						when={isBlocking}
+						message={location =&gt; `Are you sure you want to go to ${location.pathname}` }
+					/&gt;
+
+					&lt;p&gt;Blocking?{" "} {isBlocking ? "Yes, click a link or the back button" : "Nope"}&lt;/p&gt;
+
+					&lt;p&gt;
+						&lt;input size="50" placeholder="type something to block transitions"
+							onChange={event =&gt; {
+								this.setState({
+								isBlocking: event.target.value.length &gt; 0
+								});
+							}} /&gt;
+					&lt;/p&gt;
+
+					&lt;p&gt;&lt;button&gt;Submit to stop blocking&lt;/button&gt;&lt;/p&gt;
+				&lt;/form&gt;
+			);
+		}
+}
+
+export default PreventingTransitionsExample;
+</pre>
+				<hr class="m-5">
+				<h3><a href="https://reacttraining.com/react-router/web/example/animated-transitions">Роутинг с анимацей</a></h3>
+				<p>В данном примере используется TransitionGroup из "react-transition-group" (не забудь установить).</p>
+<pre class="p-2">import React from "react";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+
+import "./website/modules/examples/Animation/styles.css";
+
+function AnimationExample() {
+	return (
+		&lt;Router&gt;
+			&lt;Route
+			render={({ location }) =&gt; (
+				&lt;div style={styles.fill}&gt;
+				&lt;Route exact path="/" render={() =&gt; &lt;Redirect to="/hsl/10/90/50" /&gt;} /&gt;
+
+				&lt;ul style={styles.nav}&gt;
+					&lt;NavLink to="/hsl/10/90/50"&gt;Red&lt;/NavLink&gt;
+					&lt;NavLink to="/hsl/120/100/40"&gt;Green&lt;/NavLink&gt;
+					&lt;NavLink to="/rgb/33/150/243"&gt;Blue&lt;/NavLink&gt;
+					&lt;NavLink to="/rgb/240/98/146"&gt;Pink&lt;/NavLink&gt;
+				&lt;/ul&gt;
+
+				&lt;div style={styles.content}&gt;
+					&lt;TransitionGroup&gt;
+{/* no different than other usage of CSSTransition, just make sure to pass `location` to `Switch` so it can match the old location as it animates out */}
+					&lt;CSSTransition key={location.key} classNames="fade" timeout={300} &gt;
+						&lt;Switch location={location}&gt;
+							&lt;Route exact path="/hsl/:h/:s/:l" component={HSL} /&gt;
+							&lt;Route exact path="/rgb/:r/:g/:b" component={RGB} /&gt;
+{/* Without this `Route`, we would get errors during the initial transition from `/` to `/hsl/10/90/50` */}
+							&lt;Route render={() =&gt; &lt;div&gt;Not Found&lt;/div&gt;} /&gt;
+						&lt;/Switch&gt;
+					&lt;/CSSTransition&gt;
+					&lt;/TransitionGroup&gt;
+				&lt;/div&gt;
+				&lt;/div&gt;
+			)}
+			/&gt;
+		&lt;/Router&gt;
+	);
+}
+		
+function NavLink(props) {
+	return (&lt;li style={styles.navItem}&gt;&lt;Link {...props} style={{ color: "inherit" }} /&gt;&lt;/li&gt;);
+}
+		
+function HSL({ match: { params } }) {
+	return (&lt;div style={{
+			...styles.fill,
+			...styles.hsl,
+			background: `hsl(${params.h}, ${params.s}%, ${params.l}%)`
+		}} &gt;
+		hsl( {params.h}, {params.s} %, {params.l} %)
+	&lt;/div&gt;);
+}
+		
+function RGB({ match: { params } }) {
+	return (&lt;div
+		style={{
+			...styles.fill,
+			...styles.rgb,
+			background: `rgb(${params.r}, ${params.g}, ${params.b})`
+		}}
+	&gt;
+		rgb({params.r}, {params.g}, {params.b})
+	&lt;/div&gt;);
+}
+		
+const styles = {};
+		
+styles.fill = {
+	position: "absolute",
+	left: 0,
+	right: 0,
+	top: 0,
+	bottom: 0
+};
+
+styles.content = {
+	...styles.fill,
+	top: "40px",
+	textAlign: "center"
+};
+
+styles.nav = {
+	padding: 0,
+	margin: 0,
+	position: "absolute",
+	top: 0,
+	height: "40px",
+	width: "100%",
+	display: "flex"
+};
+		
+styles.navItem = {
+	textAlign: "center",
+	flex: 1,
+	listStyleType: "none",
+	padding: "10px"
+};
+
+styles.hsl = {
+	...styles.fill,
+	color: "white",
+	paddingTop: "20px",
+	fontSize: "30px"
+};
+
+styles.rgb = {
+	...styles.fill,
+	color: "white",
+	paddingTop: "20px",
+	fontSize: "30px"
+};
+		
+export default AnimationExample;		
+</pre>
+				<hr class="m-5">
+				<h3>Filters</h3>
+				<p>Для реализации фильтрации необходимо использовать query params <a href="https://reacttraining.com/react-router/web/example/query-parameters">https://reacttraining.com/react-router/web/example/query-parameters</a>.</p>
+				<hr class="m-5">
+				<h2>Библиотека PropTypes</h2>
+				<p>Проверка типов с помощью <a href="https://ru.reactjs.org/docs/typechecking-with-proptypes.html#proptypes">PropTypes</a>. Эта библиотека разработана разработчиками реакта.</p>
+				<p>По мере роста приложения можно отловить много ошибок с помощью проверки типов. Ошибки по несообветствию типов можно решать разными способами...эта библиотека - самый лайтовый вариант. Еще можно подключить библиотеку <a href="https://flow.org/">Flow</a>, она тоже следит за типизацией, но она более сложна своим новым синтаксисом (немного напоминает тайпскрипт). И третий вариант - подключение <a href="https://www.typescriptlang.org/">TypeScript</a> - это надстройка над джаваскриптом.</p>
+				<p>Для начала надо установить:</p>
+<pre class="p-2">npm install --save prop-types
+</pre>
+				<p>Подключить в проекте:</p>
+<pre class="p-2">import PropTypes from 'prop-types'; // ES6
+var PropTypes = require('prop-types'); // ES5 with npm
+</pre>
+				<p>Подключается для компонента, которому приходят какие-то пропсы и мы хотим их проверить.</p>
+<pre class="p-2">import React from 'react';
+import PropTypes from 'prop-types';
+	
+class MyComponent extends React.Component {
+	render() {
+		// ... do things with the props
+	}
+}
+	
+MyComponent.propTypes = {
+// You can declare that a prop is a specific JS primitive. By default, these are all optional.
+	optionalArray: PropTypes.array,
+	optionalBool: PropTypes.bool,
+	optionalFunc: PropTypes.func,
+	optionalNumber: PropTypes.number,
+	optionalObject: PropTypes.object,
+	optionalString: PropTypes.string,
+	optionalSymbol: PropTypes.symbol,
+	
+	// Anything that can be rendered: numbers, strings, elements or an array (or fragment) containing these types.
+	optionalNode: PropTypes.node,
+	
+	// A React element (ie. <mycomponent>).
+	optionalElement: PropTypes.element,
+	
+	// A React element type (ie. MyComponent).
+	optionalElementType: PropTypes.elementType,
+	
+	// You can also declare that a prop is an instance of a class. This uses JS's instanceof operator.
+	optionalMessage: PropTypes.instanceOf(Message),
+	
+	// You can ensure that your prop is limited to specific values by treating it as an enum.
+	optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+	
+	// An object that could be one of many types
+	optionalUnion: PropTypes.oneOfType([
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.instanceOf(Message)
+	]),
+	
+	// An array of a certain type
+	optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
+	
+	// An object with property values of a certain type
+	optionalObjectOf: PropTypes.objectOf(PropTypes.number),
+	
+	// You can chain any of the above with `isRequired` to make sure a warning is shown if the prop isn't provided.
+	
+	// An object taking on a particular shape
+	optionalObjectWithShape: PropTypes.shape({
+		optionalProperty: PropTypes.string,
+		requiredProperty: PropTypes.number.isRequired
+	}),
+	
+	// An object with warnings on extra properties
+	optionalObjectWithStrictShape: PropTypes.exact({
+		optionalProperty: PropTypes.string,
+		requiredProperty: PropTypes.number.isRequired
+	}),
+	
+	requiredFunc: PropTypes.func.isRequired,
+	
+	// A value of any data type
+	requiredAny: PropTypes.any.isRequired,
+	
+	// You can also specify a custom validator. It should return an Error
+	// object if the validation fails. Don't `console.warn` or throw, as this won't work inside `oneOfType`.
+	customProp: function(props, propName, componentName) {
+	if (!/matchme/.test(props[propName])) {
+		return new Error(
+		'Invalid prop `' + propName + '` supplied to' +
+		' `' + componentName + '`. Validation failed.'
+		);
+	}
+	},
+	
+	// You can also supply a custom validator to `arrayOf` and `objectOf`.
+	// It should return an Error object if the validation fails. The validator
+	// will be called for each key in the array or object. The first two
+	// arguments of the validator are the array or object itself, and the
+	// current item's key.
+	customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+		if (!/matchme/.test(propValue[key])) {
+			return new Error(
+			'Invalid prop `' + propFullName + '` supplied to' +
+			' `' + componentName + '`. Validation failed.'
+			);
+		}
+	})
+};
+</mycomponent></pre>
+				<p>Просто задать свойство "объект" нельзя....ESLint будет ругаться на простой "объект", он будет просить описать его конкретнее. То же самое для массива.</p>
+				<p>При получении неверного типа данных мы ыполучим сообщение об ошибке в консоли, что помогает быстрее отлавливать баги. Особенно это бывает при использовании сторонних библиотек, которые используют проп-тайпс и при передаче им данных можно понять, что ты что-то сделал неверно. Все пишется ради консольных варнингов.</p>
+<pre class="p-2">import React, { Component } from 'react';
+import About from './About';
+import PropTypes from 'prop-types';
+
+class Product extends Component {
+	render() {
+		return &lt;div&gt;
+			here is a product: {this.props.match.params.id}
+			&lt;About /&gt;
+		&lt;/div&gt;
+	}
+}
+
+Product.propTypes = {
+	match: PropTypes.object.isRequired
+}
+
+export default Product
+</pre>
+				<p><b>PropTypes.shape</b> - очень популярный, пригодится в любом случае. По сути - жесткое описание объекта.</p>
+				<p>Линтеры ругаюся на свойство PropTypes.any, потому, как не видят в нем смысла. Не надо его использовать.</p>
+				<p>Необходимо максимально детально описывать пропсы, чтобы приложение работало максимально правильно. И подобный  подход  сильно облегчает жизнь разработчику, которому придется работать с тем же кодом в последствии. Помимо варнингов, проп-тайпс выполняет функцию "декларативности", мы объявляем, как должны выглядеть наши данные и что принимает наш компонент. Это помогает в последствии легче переиспользовать компоненты. Если что-то не будет описано, но придет, ничего сильно страшного в этом нет, но надо стараться описывать максимально полно. Например, если я в компоненте использую что-то одно, то можно только это одно и описать, суть в том, чтобы описать именно то, что компонент использует.</p>
+				<p>Есть еще вычисляемые свойства, но вычислять их надо будет каждый раз и их не рекомпендовано использовать.</p>
+				<hr class="m-5">
+				<h3>ESLint</h3>
+				<p>Необходимо установить его глобально. <a href="https://eslint.org/">ESLint</a>. Это не единственный линтер. Линтер - это некий скрипт, который отслеживает, что программист придерживается заданного стиля кода. Это тнеободимо для того, чтобы уберечься от ошибок и для того, чтобы все писали в одинаковом стиле. Для визуального удовлетворения :).</p>
+				<p>Установка:</p>
+<pre class="p-2">npm install eslint --save-dev
+</pre>
+				<p>Инициализация:</p>
+<pre class="p-2">./node_modules/.bin/eslint --init
+</pre>
+				<p>После запуска команды инициализации, необходимо ответить на нужные вопросы, согласиться с установкой дополнительных модулей</p>
+				<p>After that, you can run ESLint on any file or directory like this:</p>
+<pre class="p-2">./node_modules/.bin/eslint yourfile.js
+</pre>
+				<p>Есть 3 предустановленных варианта кодстайла для джаваскрипта: стандарт, google и airbnb (этот самый популярный). Пример файла-инита eslint:</p>
+<pre class="p-2">module.exports = {
+	env: {
+		browser: true,
+		es6: true,
+	},
+	extends: 'airbnb',
+	globals: {
+		Atomics: 'readonly',
+		SharedArrayBuffer: 'readonly',
+	},
+	parserOptions: {
+		ecmaFeatures: {
+			jsx: true,
+		},
+		ecmaVersion: 2018,
+		sourceType: 'module',
+	},
+	plugins: [
+		'react',
+	],
+	rules: {},
+};		
+</pre>
+				<p>Все это счастье работает только на этапе разработки. Должно подсвечивать ошибки в редакторе. Надо в редакторе в настройках выбрать следование правилам линта, а не дефолтным.</p>
+				<p>Некоторые редакторы (ide) поддерживают опцию pre-commit (pre-push), они не позволяют сделать заливку до тех пор, пока линтер не проверит код. Желательно, но гемморно, поэтому многие не делают.</p>
+				<p>В esconfig есть ключ "rules", туда можно добавлять свои правила, свое отношение к правилам, например:</p>
+<pre class="p-2">{
+	"rules": {
+		"semi": ["error", "always"],
+		"quotes": ["error", "double"]
+	}
+}
+</pre>
+				<p>"Отношение" к правилам:</p>
+				<ul>
+						<li>"off" or 0 - turn the rule off</li>
+						<li>"warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)</li>
+						<li>"error" or 2 - turn the rule on as an error (exit code will be 1)</li>
+				</ul>
+				<p>Применение:</p>
+<pre class="p-2">{
+	"rules": {
+		"semi": 2
+	}
+}
+</pre>
+				<p>Файлы конфигов могут быть огромными, перечень правил можно смотреть, например, <a href="https://eslint.org/docs/rules/">тут</a>. Перечень правил зависит от выборки при нициализации, от того, задано, с чем мы работаем в данном проекте.</p>
+				<p>Посмотреть правила можно, например, открыв devDependencies в package.json, и погуглив зависимости линтера. Для <a href="https://www.npmjs.com/package/eslint-plugin-react">eslint-plugin-react
+				</a>. Если мы хотим игнорировать какое либо из существующих правил, то копируем его имя в rules eslint файла и задаем наше к нему "отношение". Так же можно настроить игнорирование конкретной ошибки только для <a href="https://eslint.org/docs/user-guide/command-line-interface#ignoring-files-from-linting">одного конкретного файла</a>.</p>
+				<hr class="m-5">
+<pre class="p-2">{
+	"rules": {
+		"react/boolean-prop-naming": 0
+	}
+}
+</pre>
+				<p>В create-react-app уже есть встроенный линтер. Для одного проекта можно настроить множество линтов.</p>
+				<hr class="m-5">
+				<h2>Material UI</h2>
+				<p><a href="https://material-ui.com/ru/getting-started/installation/">Material UI</a> - популярный React UI фреймверк. React компоненты для быстрой и легкой веб-разработки.</p>
+				<p>Начало работы - установка:</p>
+<pre class="p-2">npm install @material-ui/core
+</pre>
+				<p>Импорт:</p>
+				<p>Иконки поедоставляюся отдельным <a href="https://www.npmjs.com/package/@material-ui/icons">паком</a> и требуют дополнительной установки:</p>
+<pre class="p-2">npm install @material-ui/icons
+</pre>
+				<p>Для использования конкретного элемента - импортируем его себе в компонет (с зависимостями). Например, простая кнопка:</p>
+<pre class="p-2">import Button from '@material-ui/core/Button';
+...
+	&lt;Button variant="contained" color="primary"&gt;Hello World&lt;/Button&gt;
+...
+</pre>
+				<hr class="m-5">
+				<h3>Кастомизация темы.</h3>
+				<p>Добавляем библиотеку material ui, theme provider и <a href="https://material-ui.com/customization/color/">цвета</a>, кастомайзим палитру и оборачиваем компонент в ThemeProvider. Какие параметры можно использовать дла кастомизации, можно посмотреть в документации в настройках <a href="https://material-ui.com/customization/themes/">тем</a></p>
+<pre class="p-2">...
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+import { pink, lime } from '@material-ui/core/colors';
+
+import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCartRounded';
+
+const theme = createMuiTheme({
+	palette: {
+		primary: lime,
+		secondary: pink
+	},
+});
+
+class App extends Component {
+	state = {
+		test: 'Tratata'
+	}
+
+	render() {
+		
+		return (
+			&lt;ThemeProvider theme={theme}&gt;
+				&lt;Button variant="contained" color="primary"&gt;
+					Hello World
+				&lt;/Button&gt;
+				&lt;Button variant="contained" color="secondary"&gt;
+					Hello World
+				&lt;/Button&gt;
+				&lt;Badge badgeContent={10} max={999} color="secondary"&gt;
+					&lt;ShoppingCartIcon /&gt;
+				&lt;/Badge&gt;
+			&lt;/ThemeProvider&gt;
+		);
+	}	
+}
+
+export default App;
+</pre>			
+				<p>Итог:</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/customization.png" alt="material customization"></p>
+				<p>ThemeProvider - штука, которая раздает что-то всем своим детям, применяется в основном для передачи темы. Выше было описано.</p>
+				<p>Обычно тема выносится в отдельный файл.</p>
+				<p>Каждый элемент material ui принимаеет какие-то параметры, подробная документация по <a href="https://material-ui.com/">components api</a>.</p>
+				<hr class="m-5">
+				<p><b>НЕ РЕКОМЕНДУЕТСЯ</b> импортировать material ui компоненты следующим образом, это влияет на производительность. Из компоненты надо импортировать по-одному.</p>
+<pre class="p-2">import { Button } from '@material-ui/core';
+</pre>
+				<hr class="m-5">
+				<p>Последняя версия material ui активно использует hooks, например <a href="https://material-ui.com/styles/basics/">makeStyles</a>.</p>
+<pre class="p-2">import React from 'react';
+import { makeStyles } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles({
+	root: {
+		background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+		border: 0,
+		borderRadius: 3,
+		boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+		color: 'white',
+		height: 48,
+		padding: '0 30px',
+	},
+});
+
+export default function Hook() {
+	const classes = useStyles();
+	return &lt;Button className={classes.root}&gt;Hook&lt;/Button&gt;;
+}
+</pre>
+				<p>Объект makeStyles принимает свойства в формате js (camelCase). После применения для компонета, автоматически формируются стили. Стили инкапсулируются (аналогично scope у vue.js).</p>
+				<hr class="m-5">
+				<p><a href="https://material-ui.com/styles/api/#createstyles-styles-styles"><b>withStyles</b></a> - HOC для стилизации. Отдельно задаются стили, а потом итоговый экспорт компонента заворачивается в withStyles. Так было в третьей версии.</p>
+<pre class="p-2">import React from 'react';
+import { withStyles } from '@material-ui/styles';
+
+const styles = {
+	root: {
+		backgroundColor: 'red',
+	},
+};
+
+class MyComponent extends React.Component {
+	render () {
+		return &lt;div className={this.props.classes.root} /&gt;;
+	}
+}
+
+export default withStyles(styles)(MyComponent);
+</pre>
+				<p>Особенность "styles" в том, что туда можно передать функцию, которая будет принимать тему и далее можно манипулировать данными темы, т.е. есть доступ к теме. В makeStyles доступ к теме тоже где-то есть.</p>
+<pre class="p-2">import React from 'react';
+import { withStyles } from '@material-ui/styles';
+
+const styles = (theme) =&gt; ({
+	root: {
+		backgroundColor: 'red',
+		color: theme.palette.primary
+	},
+});
+
+class MyComponent extends React.Component {
+	render () {
+		return &lt;div className={this.props.classes.root} /&gt;;
+	}
+}
+
+export default withStyles(styles)(MyComponent);
+</pre>
+				<p>В useStyles добавили возможность в свойство (колор в примере) передать функцию, которая принимает пропсы и возвращает колор здесь.</p>
+<pre class="p-2">import React from 'react';
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles({
+	root: {
+	backgroundColor: 'red',
+	color: props =&gt; props.color,
+	},
+});
+
+export default function MyComponent(props) {
+	const classes = useStyles(props);
+	return &lt;div className={classes.root} /&gt;;
+}
+</pre>
+<pre class="p-2">const useStyles = makeStyles(theme =&gt; ({
+	root: props =&gt; ({
+		backgroundColor: props.backgroundColor,
+		color: theme.color,
+	}),
+}));
+</pre>
+				<hr class="m-5">
+				<h3>Полезныые ссылки:</h3>
+				<ul>
+					<li><a href="https://habr.com/ru/post/329996/">Простой туториал React Router v4</a></li>
+					<li><a href="https://toster.ru/q/413948">Зачем использовать server-side rendering? Какие преимущества у рендеринга на сервере?</a></li>
+					<li>В версиях 3 и 4 в BrowserRouter надо передавать объект хистори, без него не сможем получить параметров, этого самого хистори.</li>
+					<li><a href="https://www.npmjs.com/package/prop-types">npm prop-types</a></li>
+					<li>Позднее надо будет почитать что-нибудь про работу с перфомансом-производительностью...до этого доходят только тогда, когда начинают возникать с ней проблемы :)</li>
+					<li>yarn порой бывает предпочтительннн npm, потому, как роаботает быстрей и что-том немного быстрее обрабатывает.</li>
+					<li><a href="https://github.com/axios/axios#config-defaults">axios - Promise based HTTP client for the browser and node.js</a></li>
+					<li>css in js называется <a href="https://cssinjs.org/?v=v10.0.0-alpha.23">jss</a></li>
+					<li>Уходящие в прошлое <a href="https://github.com/css-modules/css-modules">css modules</a></li>
+				</ul>
+				<hr class="m-5">
+			</div>
+			<div class="col-12 pt-2 pb-2">
+					<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson6" role="button" aria-expanded="true" aria-controls="lesson6">Lesson #6: Redux</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse show" id="lesson6">
+				<h2>Redux</h2>
+				<p>Redux - это архитектура, которая предоставляет приложению единственное состояние (store).</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/redux1.jpg" alt="with redux"></p>
+				<p>Эта архитектура была придумана на основе архитектуры Flux (была изначально) от фейсбука.</p>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/flux.png" alt="flux architecture"></p>
+				<p>Изначально есть некий action (например, нажатие на кнопку), далее есть объект-диспатчер, который обрабатывает это нажатие, затем этот объект обращается к стору, сохраняет все, и уже из стора во вью выводятся какие-то значения...на вью, в свою очередь есть какие-то экшены, которые тоже обращаются у диспатчу. Флакс - устаревшая технология, у которой есть ряд своих недостатков, сейчас время редакса.</p>
+				<hr class="m-5">
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/redux.png" alt="redux"></p>
+				<p>На первый взгляд архитектура редакса очень похожа, но здесь сначала экшен, а потом редьюсер (а не диспатч), а потом стор.</p>
+				<p>Редакс - это центральное хранилище данных. Далее мы будем рассматривать редакс в бибдиотеке, которая так и называется. Редакс напрямую с реактом не связана никак, он может быть использован в ангуляре, в любых других приложениях, в нативном джеесе.</p>
+				<hr class="m-5">
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/redux1.png" alt="redux"></p>
+				<ol>
+					<li>Пользователь совершает действие, напимер, кликает по кнопке.</li>
+					<li>Триггерится и диспатчится соответствующий action.</li>
+					<li>Reducer получает уведомление об action и меняет state.</li>
+					<li>Store получает новый<sup>*</sup> state, в результате чего подписанные на него компоненты обновляются.</li>
+				</ol>
+				<p><sup>*</sup> при работе с объектами и массиваминеобходимо всегда возвращать новые массивы и объекты, т.е. следовать иммутабельности (помнить о том, что это ссылочные типы).</p>
+				<hr class="m-5">
+				<p>"Диспатчить" - класть данные в стор.</p>
+				<p>Далее в данной лекции любое упоминание стейта подразумевает под собой стейт редакса.</p>
+				<hr class="m-5">
+				<h3>Три принципа</h3>
+				<ol>
+					<li><b>Единственный источник правды.</b> В идеале стора должна быть одним источником данных для всего проекта, но в реальности это все работает немного не так. Есть данные, которые мы храним в сторе, есть те, чтомы храним в стейте компонента. Есть 2 подхода при программировании (разные мнения): одни предпочитают все-все хранить в сторе (говорить на собесах), другие делят (если данные используются только и только для одного компонента или, пусть, для одного его ребенка, и не влияют на общее состояние системы - то их можно хранить в стейте компонента...если есть возможномть использовать стейт компонента, то лучше - стейт). Каждый решает для себя, как ему удобнее жить.</li>
+					<li><b>Состояние только для чтения.</b> Все, что мы кладем в стору - мы не имеем права менять. Мы должны возвращать только новое состояние сторы, это нужно для того, чтобы не было мутаций.</li>
+					<li><b>Мутации написаны, как чистые функции.</b> Мутация-редьюсер не длолжна иметь никаких сайд эффектов.</li>
+				</ol>
+				<p><i>Sideeffect</i> - это что-то, что может повлиять на "чистоту" вашей функции. Редьюсер же - функция. Чистая функция, это значит такая, что если ей на вход подать одни и те же параметры, то результат будет всегда один и тот же.</p>
+				<p>Одна из фишек редакса - мы можем отслеживать, как и когда менялось состояние. По шагам. Порой в процессе программирования мы не можем понять в какой момент мы получили неверные данные, эта фишка позволяет отдебажить этот момент. И можно откатиться до какого-то момента и понять, как выглядели тогда данные. Для этого нам надо каждый раз именно возвращать новое состояние стейта.</p>
+				<hr class="m-5">
+				<h4>Действие-action (2 на рисуночке)</h4>
+				<p><a href="https://rajdee.gitbooks.io/redux-in-russian/content/docs/basics/Actions.html">Action.</a> - это обычный объект.</p>
+<pre class="p-2">const ADD_TODO = 'ADD_TODO'
+
+{
+	type: ADD_TODO,
+	text: 'Build my first Redux app' // payload 
+}
+</pre>
+				<p>payload - обычно используют это название для ключа - это данные, которые мы хотим передать или сделать что-то с этими данными в сторе.</p>
+				<p>Действия обычно лежат в отдельной папке actions.</p>
+				<p>Далее есть <b>генератор действий</b>не что иное, как функции, которые создают-отдают действия. Довольно просто путать термины “action” и “action creator,” поэтому постарайтесь использовать правильный термин. В Redux генераторы действий (action creators) просто возвращают action:</p>
+<pre class="p-2">// actions
+export const ADD_TODO = 'ADD_TODO'
+export const REMOVE_TODO = 'REMOVE_TODO'
+
+// generators
+export function addTodo(text) {
+	return {
+		type: ADD_TODO,
+		payload: text
+	}
+}
+
+export function removeTodo(id) {
+	return {
+		type: REMOVE_TODO,
+		payload: id
+	}
+}
+</pre>
+				<p>Не рекомендуется обходиться без контант действий, потому, как их же можно потом использовать в других местах... чтобы не пришлось менять значение этих элементов везде в отдельности. И так удобнее их искать в файле.</p>
+				<p>Далее - <b>reducers</b>. Действия (Actions) описывают тот факт, что что-то совершилось, но не определяют, как в ответ изменяется состояние (state) приложения. Это задача для редюсеров (reducers). Т.е. - это некоторая функция, которая видоизменяет стейт. Для них создается отдельная папка - reducers.</p>
+				<p>Reducer получает текущий стейт нашей сторы и некий экшен (то, что мы написали несколько выше), получает то, что возвращает генератор экшенов. Редьюсер должен вернуть новое состояние нашего стейта без мутаций.</p>
+<pre class="p-2">import { ADD_TODO, REMOVE_TODO } from '../actions/todos';
+
+// инициализация или присвоение дефолтного значения
+const initState = []
+let generatedId = 0;
+
+export default function todoApp(state = initState, action) {
+	switch ( action.type ) {
+		case ADD_TODO: {
+			return [...state, {
+				text: action.payload,
+				id: generatedId++
+			}]
+		}
+		case REMOVE_TODO: {
+			const index = state.findIndex(( {id} ) =&gt; id === action.payload );
+			const newState = state.slice();
+			newState.splice(index, 1);
+			return newState;
+		}
+		default: return state;
+	}
+}
+</pre>
+				<p>Далее добавляем редакс и далее уже работаем со стейтом:</p>
+<pre class="p-2">// App.js
+
+// импортирует createStore из редакса
+import { createStore } from 'redux';
+
+// далее мы импортируем наши редьюсеры
+import todoApp from './reducers';
+
+// создаем стору
+const store = createStore(todoApp);
+</pre>
+				<p>createStore принимаеи 2 параметра - наш текущий редьюсер и мы может передать текущее состояние сервера (Но обычно так никто не делает и можно простопередавать один параметр). Но так можно сделать.</p>
+				<p>Чтобы подписаться на что-то:</p>
+<pre class="p-2">// импортирует createStore из редакса
+import { createStore } from 'redux';
+
+// далее мы импортируем наши редьюсеры
+import todoApp from './reducers';
+import { addTodo } from './actions/todos'
+
+// создаем стору
+const store = createStore(todoApp);
+
+// подписка на изменение сторы
+const unsubscribe = store.subscribe(() =&gt;
+	console.log(store.getState())
+)
+
+// Отправим несколько действий...отправляем наши обработчики
+store.dispatch(addTodo('Learn about actions'))
+store.dispatch(addTodo('Learn about reducers'))
+store.dispatch(addTodo('Learn about store'))
+
+// Прекратим слушать обновление состояния
+unsubscribe()
+</pre>
+				<p><img src="file:///Users/kate/Documents/_react/compendium/images/redux-result01.png" alt="redux results"></p>
+				<hr class="m-5">
+				<p>Редакс очень оптимизирован, самостоятельно на такой уровень выйти оооочени и очень трудно, посему - просто подьзуй редакс.</p>
+				<hr class="m-5">
+				<p>Другая ситуация, пусть в туду мы храним некий фильтр в сторе, помимо экшенов. В папке экшенов добавляем файл filter.js. todoss.js остается прежним.</p>
+<pre class="p-2">export const VisibilityFilters = {
+	SHOW_ALL: 'SHOW_ALL',
+	SHOW_COMPLETED: 'SHOW_COMPLETED',
+	SHOW_ACTIVE: 'SHOW_ACTIVE'
+}
+
+export function setVisibilityFilter(filter) {
+	return { type: SET_VISIBILITY_FILTER, filter }
+}
+</pre>
+				<p>reducers/index.js</p>
+<pre class="p-2">import { ADD_TODO, REMOVE_TODO } from '../actions/todos';
+import { SET_VISIBILITY_FILTER, VisibilityFilters } from '../actions/filter';
+
+// инициализация или присвоение дефолтного значения
+const initState = {
+	filter: VisibilityFilters.SHOW_ALL,
+	todos: []
+};
+let generatedId = 0;
+
+export default function todoApp(state = initState, action) {
+	switch ( action.type ) {
+		case ADD_TODO: {
+			return {
+				...state,
+				todos: [...state.todos, {
+					text: action.payload,
+					id: generatedId++
+				}]
+			}  
+		}
+		case REMOVE_TODO: {
+			// change it according to new object structure
+			...
+		}
+		case SET_VISIBILITY_FILTER: {
+			return {
+				...state,
+				filter: action.payload
+			}
+		}
+		default: return state;
+	}
+}
+</pre>
+				<p>state большой и не сильно удобно так делать, хотелось бы разделить логику. В редаксе есть возможность это сделать с помощью combineReducers. Делается следующим образом - у нас есть индекс в папке редьюсерс, мы выносим логику наших редьюсеров отдельно - файлы todos.js и filters.js (reducers/). Разносим все по соотвествующим файлам.</p>
+<pre class="p-2">// reducers/todos.js
+
+import { ADD_TODO, REMOVE_TODO } from '../actions/todos';
+const initState = [];
+let generatedId = 0;
+
+export default function todoApp(state = initState, action) {
+    switch ( action.type ) {
+        case ADD_TODO: {
+            return [...state, {
+                text: action.payload,
+                id: generatedId++
+            }]
+        }
+        case REMOVE_TODO: {
+            const index = state.findIndex(( {id} ) =&gt; id === action.payload );
+            const newState = state.slice();
+            newState.splice(index, 1);
+            return newState;
+        }
+        default: return state;
+    }
+}
+</pre>
+<pre class="p-2">// reducers/filters.js
+import { SET_VISIBILITY_FILTER } from '../actions/filter'
+
+const initState = {
+    filter: ''
+};
+
+export default function todoApp(state = initState, action) {
+    switch ( action.type ) {
+        case SET_VISIBILITY_FILTER: {
+            return { filter: action.payload }
+        }
+        default: return state;
+    }
+}
+</pre>
+<pre class="p-2">// reducers/index.js
+import { combineReducers } from "redux";
+import todos from './todos'
+import filters from './filters'
+
+// здесь мы возвращаем объект на основе наших редьюсеров
+export default combineReducers(
+    {
+        todos, // todos: todos
+        filters
+    }
+)
+</pre>
+				<p>Таким образом мы раскидали логику по отдельным местам, все стало нагляднее. Из отдельных файлов возвращается только то, что касается конкретных редьюсеров, изменяетмся только то, с чем они работали.</p>
+<pre class="p-2">// actions/filter.js
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+
+export const VisibilityFilters = {
+    SHOW_ALL: 'SHOW_ALL',
+    SHOW_COMPLETED: 'SHOW_COMPLETED',
+    SHOW_ACTIVE: 'SHOW_ACTIVE'
+}
+
+export function setVisibilityFilter(filter) {
+    return { type: SET_VISIBILITY_FILTER, payload: filter }
+}
+</pre>
+				<hr class="m-5">
+				<h3>Redux + React</h3>
+				<p>Установка:</p>
+<pre class="p-2">npm install --save react-redux
+</pre>
+				<p>Работа <a href="https://rajdee.gitbooks.io/redux-in-russian/content/docs/basics/UsageWithReact.html">реакт-редакс</a> заключается в том, что он очень удобно позволяем нам работать с этим стейтом.</p>
+				<p>Сам стор можно положить в отдельный файл и импортировать его в App.js или в своем компоненте и делать диспатч там, где удобно, но это не особо удобно в работе. Поэтому сделали библиотеку для реакта...для удобства работы.</p>
+				<p>Создаем новые компонеты в прокте. List.js. В нем  мы будем использовать connect - позволяем передать стейт в компонент. Он работает как HOC - оборачивает наш List, добавляя в него новые пропсы на основе стора. Connect принимает 2 вещи: объект, в котором мы берем что-то из сторы (mapStateToProps), второе, что он принимает (mapDispatchToProps) - функция, которая диспатчит наш стор. Для того, чтобы передать стору нашим компонентам мы используем Provider. Provider - передача контекста.</p>
+<pre class="p-2">// List/index.js
+import React from 'react';
+import { connect } from 'react-redux';
+import { addTodo } from '../../actions/todos';
+
+function List(props) {
+    return <ul>
+        {props.todos.map(({text, id}) =&gt; (<li key="{id}">{text}</li>))}
+    </ul>
+}
+
+const mapStateToProps = ({todos}) =&gt; ({ todos })
+const mapDispatchToProps = (dispatch) =&gt; {
+    return {
+        onClick: () =&gt; {
+            dispatch(dispatch(addTodo('Learn about actions')))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(List)
+</pre>
+<pre class="p-2">// App.js 
+import React from 'react';
+
+// импортирует createStore из редакса
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import List from './components/List';
+
+// далее мы импортируем наши редьюсеры
+import todoApp from './reducers';
+import { addTodo } from './actions/todos';
+import { setVisibilityFilter, VisibilityFilters } from './actions/filter';
+
+// создаем стору
+const store = createStore(todoApp);
+
+// Просто наполняем
+store.dispatch(addTodo('Learn about actions'))
+store.dispatch(addTodo('Learn about reducers'))
+store.dispatch(addTodo('Learn about store'))
+
+function App() {
+	return (
+	&lt;Provider store={store}&gt;
+		&lt;div className="App"&gt;
+			&lt;List /&gt;
+		&lt;/div&gt;
+	&lt;/Provider&gt;
+	);
+}
+
+export default App;
+</pre>
+				<p>С помощью провайдера стора прокидывается всем детям, ребенок у нас - List, мы оборачиваем его с помощью connect, который, в свою очередь получает стору как параметр, и подписывается на изменение конкретно одного параметра todos (mapStateToProps) и передает именно этот todos в наш компонент List, как props (и мы можем с ним работать). Каждый раз, когда стора изменяется, лист получает новыйе пропсыи обновляется. mapDispatchToProps можно вообще не использовать, если  он  нам не нужен.</p>
+				<p>Очень часто на собеседованиях спрашивают про НОС (реализует паттерн-декоратор, дополняет наш базовый компрнент, возможно добавляет ему новые пропсы), и прекрасным его примером можно указать connect. И для передачи контекста - провайдер от реакт-редакс. При оборачивании реакт-роутеров и провайдеров, стора обычно выше, но не особо имеет значение, все зависит от того, что и где надо использовать. Если в провайдеренадо использовать роутер, то роутер должен быть первой оберткой.</p>
+				<hr class="m-5">
+				<p>Не всегда иметь работу со сторой и реализацию самого компонента в одном файле (List/index.js). Поэтому желательноиз разделать, рекомедовано делать следующим образом - для каждого компонента делать папку с его названием, index.js - в этом случает прои простом обращении к List возьмется файл индекса. В этом файле остается все, сто связано с редаксом, а сам компонент уходит в List.js в той же папке.</p>
+				<p>Папка компонента List:</p>
+<pre class="p-2">// index.js
+import { connect } from 'react-redux';
+import List from './List.js';
+
+const mapStateToProps = ({todos}) =&gt; ({ todos })
+
+export default connect(mapStateToProps)(List)
+</pre>
+<pre class="p-2">// List.js
+import React from 'react';
+
+export default function List(props) {
+	return <ul>
+		{props.todos.map(({text, id}) =&gt; (<li key="{id}">{text}</li>))}
+	</ul>
+}
+</pre>
+				<hr class="m-5">
+				<p>Добавим еще один компонет Form. Именовать надо по назначению...и подобное название допускается, только, если - это одна форма для всего проекта.</p>
+<pre class="p-2">// App.js
+import React from 'react';
+
+// импортирует createStore из редакса
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import List from './components/List';
+import Form from './components/Form';
+
+// далее мы импортируем наши редьюсеры
+import todoApp from './reducers';
+
+// // создаем стору
+const store = createStore(todoApp);
+
+function App() {
+  return (
+	&lt;Provider store={store}&gt;
+		&lt;div className="App"&gt;
+			&lt;Form /&gt;
+			&lt;List /&gt;
+		&lt;/div&gt;
+	&lt;/Provider&gt;
+  );
+}
+
+export default App;
+</pre>
+				<p>Папка Form. В пропсах Form теперь у нас есть функция addTodo, которая получает аргумент todo, и вызовет экшен addTodo с этим аргументом todo и он задиспатчится. </p>
+<pre class="p-2">// index.js
+import { connect } from 'react-redux';
+import Form from './Form.js';
+
+import { addTodo } from '../../actions/todos';
+
+const mapDispatchToProps = (dispatch) =&gt; {
+    return {
+        addTodo: (todo) =&gt; {
+            dispatch(addTodo(todo))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Form)
+</pre>
+<pre class="p-2">// Form.js
+import React, { useState } from 'react';
+
+export default function Form(props) {
+    const [todo, setTodo] = useState('');
+    
+    return &lt;div&gt;
+        &lt;input onChange={(e) =&gt; setTodo(e.target.value)} value={ todo } /&gt;
+        &lt;button onClick={() =&gt; props.addTodo(todo) }&gt;Add todo&lt;/button&gt;
+    &lt;/div&gt;
+}
+</pre>
+				<p>Папка List:</p>
+<pre class="p-2">// index.js
+import { connect } from 'react-redux';
+import List from './List.js';
+
+const mapStateToProps = ({todos}) =&gt; ({ todos })
+
+export default connect(mapStateToProps)(List)
+</pre>
+<pre class="p-2">// List.js
+import React from 'react';
+
+export default function List(props) {
+	return <ul>
+		{props.todos.map(({text, id}) =&gt; (<li key="{id}">{text}</li>))}
+	</ul>
+}
+</pre>
+				<p>Все todo мы прогоняем через стору.</p>
+				<hr class="m-5">
+
+
+				
+
+
+
+
+				<hr class="m-5">
+				1:32:25
+				redux thunk https://github.com/reduxjs/redux-thunk - позволяет писать action creators которые возвращают функцию, вместо action (за счет этого удобно делать асинхронные запросы и вызывать экшины разных редьюсеров)
+
+
+
+
+
+				<hr class="m-5">
+				<h3>Полезное:</h3>
+				<ul>
+					<li><a href="https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/">Русская документация Redux</a></li>
+					<li>Код с занятия <a href="https://github.com/Lionkka/redux-example">https://github.com/Lionkka/redux-example</a></li>
+					<li>делаем свой редакс <a href="https://www.youtube.com/watch?v=-m3evZuzXC8&amp;list=PLqHlAwsJRxANFIgAf7BO8hNYdvipLERxQ">https://www.youtube.com/watch?v=-m3evZuzXC8&amp;list=PLqHlAwsJRxANFIgAf7BO8hNYdvipLERxQ</a></li>
+					<li><a href="https://github.com/zalmoxisus/redux-devtools-extension">redux dev tools</a></li>
+					<li>Предлагаю самостоятельно рассмотреть <a href="https://github.com/mobxjs/mobx">https://github.com/mobxjs/mobx</a></li>
+					<li>Какая-то очередная потенциальная штука - <a href="https://backbonejs.org/#Getting-started">backbonejs</a></li>
+					<li>Новая мода - разработка на микрофреймверках.</li>
+					<li><a href="https://habr.com/ru/post/446026/">Почему SvelteJS возможно лучший фреймворк для новых веб-разработчиков</a></li>
+					<li><a href="https://www.youtube.com/watch?v=-m3evZuzXC8&amp;list=PLqHlAwsJRxANFIgAf7BO8hNYdvipLERxQ">codeDojo Redux</a></li>
+					<li><a href="https://lodash.com/">lodash</a> - это библиотека JavaScript, которая предоставляет вспомогательные функции для общих задач программирования с использованием парадигмы функционального программирования.</li>
+					<li><a href="https://habr.com/ru/post/217515/">lodash (underscore) — знай свою стандартную библиотеку</a></li>
+					<li><a href="https://frontender.info/es6-in-depth-generators/">ES6 в деталях: генераторы</a></li>
+					<li>PureComponent будет вызывать рендер только если обнаружит изменения в state или props компонента. <a href="https://habr.com/ru/company/redmadrobot/blog/318222/">Разбор: как и зачем применять PureComponent в React</a></li>
+					<li><a href="https://www.tutorialspoint.com/prototype/prototype_element_update">Prototype - update() Method</a></li>
+					<li><a href="https://habr.com/ru/post/351168/">Разбираемся в redux-saga: От генераторов действий к сагам</a></li>
+				</ul>
+				<hr class="m-5">
+			</div>
+			<div class="col-12 pt-2 pb-2">
+					<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson7" role="button" aria-expanded="true" aria-controls="lesson7">Lesson #7</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse show" id="lesson7">
+				<h2>Coming soon</h2>
+			</div>
+			<div class="col-12 pt-2 pb-4">
+					<a class="btn btn-info d-block" data-toggle="collapse" href="file:///Users/kate/Documents/_react/compendium/index.html#lesson8" role="button" aria-expanded="true" aria-controls="lesson8">Lesson #8</a>
+			</div>
+			<div class="col-12 pt-2 pb-2 collapse multi-collapse show" id="lesson8">
+				<h2>Coming soon</h2>
+			</div>
+
+			<div class="col-12 pt-2 pb-2">
+				// при работе с альбомами прокидыват разные айдишники в роут и загружать фотки из альбома, соответственно, сделать корзину со списком текущих продуктов
+				// переход на конкреную категорию, на конкретный товар, корзину. обратите внимание, что, когда вы переходите на конкретный товар, у вас переходит на страницу товара,  в урл должна быть запрос по Rest
+				// если компонет-продукт загружен, а юзер кликает в сайдбаре на другой продукт, то компонент уже замаунчен, он не будет перемаунтиваться (отрисовываться) поэтому надо будет отслеживать, если изменился айдишник  в матче, то делать новый запрос
+				// active navlink should be pointer-events:none
+				// при любых изменениях делать запросы на сервер
+				// докинуть проп-тайпс везде
+				<hr class="m-5">
+			</div>
+		</div>
+	</div>
+
+
+</body></html>
